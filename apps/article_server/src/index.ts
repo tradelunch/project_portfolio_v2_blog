@@ -1,17 +1,14 @@
+import { PORT } from "./env.schema";
 import express from "express";
 import { promises as fs } from "fs";
 import path from "path";
-
-// Note: importing raw .txt files as modules can confuse TypeScript unless
-// you have a module declaration for '*.txt'. Instead of importing the file
-// at build-time, resolve its path at runtime so Node can locate the file
-// inside the monorepo package layout (hoisted node_modules or local package).
 
 const app = express();
 
 app.get("/health", (req, res) => {
 	res.json({ status: "ok" });
 });
+
 app.get("/status", async (req, res) => {
 	try {
 		// Try to resolve the path via Node's module resolution. This works
@@ -44,7 +41,6 @@ app.get("/status", async (req, res) => {
 	}
 });
 
-const PORT = 4000;
 app.listen(PORT, () => {
 	console.log(`Backend listening on port ${PORT}`);
 });
