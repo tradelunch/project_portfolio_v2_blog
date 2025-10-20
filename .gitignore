@@ -36,4 +36,6 @@ yarn-error.log*
 dist/
 
 # etc
-packages/assets/posts/**/*
+*.env
+
+packages/assets/posts

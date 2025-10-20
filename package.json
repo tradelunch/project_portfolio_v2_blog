@@ -4,6 +4,8 @@
 	"scripts": {
 		"build": "turbo run build",
 		"dev": "turbo run dev",
+		"dev:web": "yarn workspace web dev",
+		"dev:server": "yarn workspace article_server dev",
 		"lint": "turbo run lint",
 		"check-types": "turbo run check-types",
 		"format": "prettier --write \"**/*.{ts,tsx,md}\""
