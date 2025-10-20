@@ -10,12 +10,22 @@ const envSchema = z.object({
 		.enum(["development", "production", "test"])
 		.default("development"),
 	PORT: z.coerce.number().default(4000),
-	DB_URL: z.string(),
 	HOST_NAME: z.string().default("localhost"),
+
+	DB_PG_HOST: z.string().default("localhost"),
+	DB_PG_DATABASE: z.string().default("db20250627"),
+	DB_PG_USER: z.string().default("super"),
+	DB_PG_PASSWORD: z.string().default(""),
+	DB_PG_PORT: z.coerce.number().default(5432),
 });
 
 export const env = envSchema.parse(process.env);
 
 export const PORT = env.PORT;
-export const DATABASE_URL = env.DB_URL;
 export const HOST_NAME = env.HOST_NAME;
+
+export const DB_PG_HOST = env.DB_PG_HOST;
+export const DB_PG_PORT = env.DB_PG_PORT;
+export const DB_PG_DATABASE = env.DB_PG_DATABASE;
+export const DB_PG_USER = env.DB_PG_USER;
+export const DB_PG_PASSWORD = env.DB_PG_PASSWORD;

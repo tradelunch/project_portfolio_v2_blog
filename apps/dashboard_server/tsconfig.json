@@ -2,13 +2,13 @@
 	"extends": "@repo/typescript-config/node-library.json",
 	"compilerOptions": {
 		"outDir": "dist",
-		"rootDir": "src",
+		"rootDir": ".",
 		"baseUrl": ".",
 		"paths": {
 			"@": ["."],
 			"@/*": ["./*"]
 		}
 	},
-	"include": ["src/**/*", "types/**/*", "**/*.d.ts"],
+	"include": ["src/**/*", "types/**/*", "**/*.d.ts", "queries", "scripts"],
 	"exclude": ["node_modules"]
 }
