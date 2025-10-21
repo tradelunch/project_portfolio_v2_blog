@@ -8,6 +8,7 @@ import '@repo/ui/styles.css';
 import '@/styles/globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ModeToggle } from '@/components/mode-toggle';
+import Header from '@/components/header';
 
 const geist = Geist({
     subsets: ['latin'],
@@ -60,19 +61,7 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    {/* <header>
-                        <div>header</div>
-                        <nav>
-                            <ul>
-                                <li>home</li>
-                                <li>about</li>
-                                <li>contact</li>
-                                <li>
-                                    <ModeToggle />
-                                </li>
-                            </ul>
-                        </nav>
-                    </header> */}
+                    <Header />
                     {children}
 
                     {/* <footer>Main footer</footer> */}
