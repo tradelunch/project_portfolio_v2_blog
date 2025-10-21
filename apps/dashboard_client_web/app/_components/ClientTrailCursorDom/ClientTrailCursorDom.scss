@@ -1,0 +1,22 @@
+.cursor {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--cursor-bg);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9999;
+    box-shadow: 0 0 10px var(--cursor-box-shadow);
+}
+
+/* Trail effect */
+.trail-dot {
+    position: absolute;
+    background-color: var(--trail-dot-bg);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.7;
+}

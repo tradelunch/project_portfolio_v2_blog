@@ -3,6 +3,8 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { IBM_Plex_Mono, Geist, IBM_Plex_Sans } from 'next/font/google';
 import clsx from 'clsx';
+import { ClientTrailCursorCanvas } from './_components/ClientTrailCursorCanvas';
+import { ClientTrailCursorDom } from './_components/ClientTrailCursorDom';
 
 const geist = Geist({
     subsets: ['latin'],
@@ -48,7 +50,15 @@ export default function RootLayout({
                     ibmPlexMono.className
                 )}
             >
+                <header>
+                    Main header
+                    <nav>navigation</nav>
+                </header>
                 {children}
+
+                <footer>Main footer</footer>
+                <ClientTrailCursorCanvas />
+                <ClientTrailCursorDom />
             </body>
         </html>
     );
