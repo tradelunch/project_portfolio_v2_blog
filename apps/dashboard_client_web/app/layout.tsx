@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { IBM_Plex_Mono, Geist, IBM_Plex_Sans } from 'next/font/google';
 import clsx from 'clsx';
-import { ClientTrailCursorCanvas } from './components/ClientTrailCursorCanvas';
-import { ClientTrailCursorDom } from './components/ClientTrailCursorDom';
+import { ClientTrailCursorCanvas } from '../components/ClientTrailCursorCanvas';
+import { ClientTrailCursorDom } from '../components/ClientTrailCursorDom';
 
 import '@repo/ui/styles.css';
 import '@/styles/globals.css';
