@@ -17,15 +17,29 @@ const envSchema = z.object({
 	DB_PG_USER: z.string().default("super"),
 	DB_PG_PASSWORD: z.string().default(""),
 	DB_PG_PORT: z.coerce.number().default(5432),
+
+	// aws
+	AWS_REGION: z.string().default("localhost"),
+	AWS_ACCESS_KEY_ID: z.string().default("localhost"),
+	AWS_SECRET_ACCESS_KEY: z.string().default("localhost"),
+	AWS_S3_BUCKET: z.string().default("localhost"),
 });
 
 export const env = envSchema.parse(process.env);
 
+// server
 export const PORT = env.PORT;
 export const HOST_NAME = env.HOST_NAME;
 
+// db
 export const DB_PG_HOST = env.DB_PG_HOST;
 export const DB_PG_PORT = env.DB_PG_PORT;
 export const DB_PG_DATABASE = env.DB_PG_DATABASE;
 export const DB_PG_USER = env.DB_PG_USER;
 export const DB_PG_PASSWORD = env.DB_PG_PASSWORD;
+
+// aws
+export const AWS_REGION = env.AWS_REGION;
+export const AWS_ACCESS_KEY_ID = env.AWS_ACCESS_KEY_ID;
+export const AWS_SECRET_ACCESS_KEY = env.AWS_SECRET_ACCESS_KEY;
+export const AWS_S3_BUCKET = env.AWS_S3_BUCKET;

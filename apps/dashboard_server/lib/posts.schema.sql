@@ -2,7 +2,7 @@
 -- ===========================
 -- USERS TABLE
 -- ===========================
-CREATE TABLE users (
+CREATE TABLE if not exists users (
     id              BIGSERIAL PRIMARY KEY,
     username        VARCHAR(50) UNIQUE NOT NULL,
     email           VARCHAR(255) UNIQUE NOT NULL,
@@ -14,14 +14,20 @@ CREATE TABLE users (
     deleted_at      TIMESTAMP DEFAULT NULL
 );
 
+insert into users (username, email, password_hash, provider, provider_id)
+VALUES ('darkowlrising', 'tio.taek.lim@gmail.com', null, 'google', null);
+
 -- ===========================
 -- POSTS TABLE
 -- ===========================
-CREATE TABLE posts (
+CREATE TYPE if not exists post_status_enum AS ENUM ('public', 'private');
+drop table if exists posts;
+CREATE TABLE if not exists posts (
     id              BIGSERIAL PRIMARY KEY,
     user_id         BIGINT NOT NULL,
     title           VARCHAR(255) NOT NULL,
     content         TEXT NOT NULL,
+    status          post_status_enum NOT NULL DEFAULT 'public',
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at      TIMESTAMP DEFAULT NULL
@@ -30,14 +36,20 @@ CREATE TABLE posts (
 -- ===========================
 -- FILES TABLE
 -- ===========================
-CREATE TABLE files (
+drop table if exists files;
+CREATE TABLE if not exists files (
     id              BIGSERIAL PRIMARY KEY,
     user_id         BIGINT NOT NULL,
     post_id         BIGINT,
     filename        VARCHAR(255) NOT NULL,
     content_type    VARCHAR(100),
+    ext             VARCHAR(30),
+    filename        VARCHAR(255) NOT NULL,
+    stored_name     VARCHAR(255) NOT NULL,
+    stored_uri      VARCHAR(255) NOT NULL,
     file_size       INTEGER,
     storage_path    TEXT NOT NULL,
+    is_thumbnail    BOOLEAN DEFAULT FALSE,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at      TIMESTAMP DEFAULT NULL
@@ -46,7 +58,7 @@ CREATE TABLE files (
 -- ===========================
 -- TAGS TABLE
 -- ===========================
-CREATE TABLE tags (
+CREATE TABLE if not exists tags (
     id              BIGSERIAL PRIMARY KEY,
     name            VARCHAR(50) UNIQUE NOT NULL,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -57,7 +69,7 @@ CREATE TABLE tags (
 -- ===========================
 -- POST_TAGS (many-to-many)
 -- ===========================
-CREATE TABLE post_tags (
+CREATE TABLE if not exists post_tags (
     post_id         BIGINT NOT NULL,
     tag_id          BIGINT NOT NULL,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -69,13 +81,13 @@ CREATE TABLE post_tags (
 -- ===========================
 -- INDEXES
 -- ===========================
-CREATE INDEX idx_users_username ON users(username);
-CREATE INDEX idx_users_provider_id ON users(provider_id);
-CREATE INDEX idx_posts_user_id ON posts(user_id);
-CREATE INDEX idx_files_user_id ON files(user_id);
-CREATE INDEX idx_files_post_id ON files(post_id);
-CREATE INDEX idx_post_tags_tag_id ON post_tags(tag_id);
-CREATE INDEX idx_post_tags_post_id ON post_tags(post_id);
+CREATE INDEX if not exists idx_users_username ON users(username);
+CREATE INDEX if not exists idx_users_provider_id ON users(provider_id);
+CREATE INDEX if not exists idx_posts_user_id ON posts(user_id);
+CREATE INDEX if not exists idx_files_user_id ON files(user_id);
+CREATE INDEX if not exists idx_files_post_id ON files(post_id);
+CREATE INDEX if not exists idx_post_tags_tag_id ON post_tags(tag_id);
+CREATE INDEX if not exists idx_post_tags_post_id ON post_tags(post_id);
 
 
 -- ===========================
@@ -89,8 +101,8 @@ CREATE INDEX idx_post_tags_post_id ON post_tags(post_id);
 --     level       INT NOT NULL DEFAULT 0,
 --     UNIQUE(name, parent_id)
 -- );
-
-CREATE TABLE categories (
+drop table if exists categories;
+CREATE TABLE if not exists categories (
     id          BIGSERIAL PRIMARY KEY,
     name        VARCHAR(100) NOT NULL,
     parent_id   BIGINT NOT NULL,
@@ -103,9 +115,9 @@ CREATE TABLE categories (
 );
 
 -- 인덱스
-CREATE INDEX idx_categories_parent_id ON categories(parent_id);
-CREATE INDEX idx_categories_root_id ON categories(root_id);
-CREATE INDEX idx_categories_level ON categories(level);
+CREATE INDEX if not exists idx_categories_parent_id ON categories(parent_id);
+CREATE INDEX if not exists idx_categories_root_id ON categories(root_id);
+CREATE INDEX if not exists idx_categories_level ON categories(level);
 
 
 -- ===========================
@@ -116,7 +128,7 @@ CREATE INDEX idx_categories_level ON categories(level);
 --     category_id BIGINT NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
 --     PRIMARY KEY (post_id, category_id)
 -- );
-CREATE TABLE post_categories (
+CREATE TABLE if not exists post_categories (
     post_id     BIGINT NOT NULL,
     category_id BIGINT NOT NULL,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -125,5 +137,23 @@ CREATE TABLE post_categories (
     PRIMARY KEY (post_id, category_id)
 );
 
-CREATE INDEX idx_post_categories_category_id ON post_categories(category_id);
-CREATE INDEX idx_post_categories_post_id ON post_categories(post_id);
+CREATE INDEX if not exists idx_post_categories_category_id ON post_categories(category_id);
+CREATE INDEX if not exists idx_post_categories_post_id ON post_categories(post_id);
+
+
+-- ===========================
+-- upsert
+-- ===========================
+
+INSERT INTO users (username, email, password_hash)
+VALUES ('john', 'john@example.com', 'hashed_pw')
+ON CONFLICT (email)
+DO UPDATE
+SET username = EXCLUDED.username,
+    password_hash = EXCLUDED.password_hash,
+    updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO users (username, email)
+VALUES ('john', 'john@example.com')
+ON CONFLICT (email)
+DO NOTHING;

@@ -9,6 +9,13 @@
 			"@/*": ["./*"]
 		}
 	},
-	"include": ["src/**/*", "types/**/*", "**/*.d.ts", "queries", "scripts"],
+	"include": [
+		"src/**/*",
+		"types/**/*",
+		"**/*.d.ts",
+		"lib",
+		"modules",
+		"scripts"
+	],
 	"exclude": ["node_modules"]
 }
