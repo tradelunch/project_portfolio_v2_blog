@@ -13,6 +13,12 @@ const config: Config = {
             },
         },
     },
+    content: [
+        './**/*.{ts,tsx}',
+        './components/**/*.{ts,tsx}',
+        '@repo/ui/**/*.{ts,tsx}', // (공유 컴포넌트 사용 시)
+    ],
+    plugins: [require('tailwindcss-animate')],
 };
 
 export default config;
