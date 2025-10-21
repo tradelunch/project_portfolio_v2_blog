@@ -41,8 +41,8 @@ export default function RootLayout({
         <html
             lang="en"
             className={clsx(
-                geist.variable,
-                ibmPlexSans.variable,
+                // geist.variable,
+                // ibmPlexSans.variable,
                 ibmPlexMono.variable
             )}
         >
@@ -54,13 +54,14 @@ export default function RootLayout({
                 )}
             >
                 <ThemeProvider
+                    // attribute="data-theme"
                     attribute="class"
                     defaultTheme="system"
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <header>
-                        Main header
+                    {/* <header>
+                        <div>header</div>
                         <nav>
                             <ul>
                                 <li>home</li>
@@ -71,10 +72,10 @@ export default function RootLayout({
                                 </li>
                             </ul>
                         </nav>
-                    </header>
+                    </header> */}
                     {children}
 
-                    <footer>Main footer</footer>
+                    {/* <footer>Main footer</footer> */}
                     <ClientTrailCursorCanvas />
                     <ClientTrailCursorDom />
                 </ThemeProvider>

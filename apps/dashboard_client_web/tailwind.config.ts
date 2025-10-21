@@ -4,6 +4,7 @@ import baseConfig from '@repo/tailwind-config/tailwind.config.ts';
 
 const config: Config = {
     ...baseConfig,
+    darkMode: 'class',
     theme: {
         extend: {
             fontFamily: {
