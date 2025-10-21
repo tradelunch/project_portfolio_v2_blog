@@ -10,7 +10,13 @@
         "rootDir": ".",
         "paths": {
             "@": ["."],
-            "@/*": ["./*"]
+            "@/*": ["./*"],
+            "@/compoents/*": ["./components/*"],
+            "@/hooks/*": ["./hooks/*"],
+            "@/styles/*": ["./styles/*"],
+            "@/types/*": ["./types/*"],
+            "@/lib/*": ["./lib/*"],
+            "@/utils/*": ["./utils/*"]
         }
     },
     "include": [

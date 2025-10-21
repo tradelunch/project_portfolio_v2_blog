@@ -6,6 +6,8 @@ import { ClientTrailCursorDom } from '../components/ClientTrailCursorDom';
 
 import '@repo/ui/styles.css';
 import '@/styles/globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
+import { ModeToggle } from '@/components/mode-toggle';
 
 const geist = Geist({
     subsets: ['latin'],
@@ -51,15 +53,31 @@ export default function RootLayout({
                     ibmPlexMono.className
                 )}
             >
-                <header>
-                    Main header
-                    <nav>navigation</nav>
-                </header>
-                {children}
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                    disableTransitionOnChange
+                >
+                    <header>
+                        Main header
+                        <nav>
+                            <ul>
+                                <li>home</li>
+                                <li>about</li>
+                                <li>contact</li>
+                                <li>
+                                    <ModeToggle />
+                                </li>
+                            </ul>
+                        </nav>
+                    </header>
+                    {children}
 
-                <footer>Main footer</footer>
-                <ClientTrailCursorCanvas />
-                <ClientTrailCursorDom />
+                    <footer>Main footer</footer>
+                    <ClientTrailCursorCanvas />
+                    <ClientTrailCursorDom />
+                </ThemeProvider>
             </body>
         </html>
     );

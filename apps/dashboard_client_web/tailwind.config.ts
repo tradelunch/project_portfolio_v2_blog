@@ -1,6 +1,6 @@
 // tailwind.config.ts
-import baseConfig from '@repo/tailwind-config/tailwind.config.ts';
 import type { Config } from 'tailwindcss';
+import baseConfig from '@repo/tailwind-config/tailwind.config.ts';
 
 const config: Config = {
     ...baseConfig,
@@ -16,7 +16,7 @@ const config: Config = {
     content: [
         './**/*.{ts,tsx}',
         './components/**/*.{ts,tsx}',
-        '@repo/ui/**/*.{ts,tsx}', // (공유 컴포넌트 사용 시)
+        '../../packages/ui/**/*.{ts,tsx}', // (공유 컴포넌트 사용 시) 실제 파일 경로
     ],
     plugins: [require('tailwindcss-animate')],
 };
