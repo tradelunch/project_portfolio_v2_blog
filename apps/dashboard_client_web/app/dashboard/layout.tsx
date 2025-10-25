@@ -30,11 +30,13 @@ export const DashboardLayout = ({
                                 </BreadcrumbLink>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator className="hidden md:block" />
+
                             <BreadcrumbItem>
                                 <BreadcrumbPage>Data Fetching</BreadcrumbPage>
                             </BreadcrumbItem>
                         </BreadcrumbList>
                     </Breadcrumb>
+
                     <SidebarTrigger className="-mr-1 ml-auto rotate-180" />
                 </header>
 

@@ -8,7 +8,8 @@ import '@repo/ui/styles.css';
 import '@/styles/globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { ModeToggle } from '@/components/mode-toggle';
-import Header from '@/components/header';
+import { DesktopNavigation } from '@/components/navigation-desktop';
+import { NavigationMenuDemo } from '@/components/navigation-header';
 
 const geist = Geist({
     subsets: ['latin'],
@@ -51,7 +52,9 @@ export default function RootLayout({
                 className={clsx(
                     // geist.className,
                     // ibmPlexSans.className,
-                    ibmPlexMono.className
+                    ibmPlexMono.className,
+                    'flex min-h-screen flex-col',
+                    'bg-background text-foreground antialiased'
                 )}
             >
                 <ThemeProvider
@@ -61,8 +64,16 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <Header />
-                    {children}
+                    <header className="sticky top-0 z-50 border-b-2 border-border bg-background">
+                        <div className="mx-auto max-w-[95vw] px-2">
+                            <DesktopNavigation />
+                        </div>
+                    </header>
+
+                    {/* <header className={clsx('flex')}>
+                        <NavigationMenuDemo />
+                    </header> */}
+                    <main className="flex-1">{children}</main>
 
                     {/* <footer>Main footer</footer> */}
                     <ClientTrailCursorCanvas />

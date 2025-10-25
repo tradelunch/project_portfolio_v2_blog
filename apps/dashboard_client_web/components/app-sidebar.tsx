@@ -110,6 +110,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
 function Tree({ item }: { item: string | any[] }) {
     const [name, ...items] = Array.isArray(item) ? item : [item];
+    console.log('TREE ITEM:', item, name, items);
 
     if (!items.length) {
         return (
