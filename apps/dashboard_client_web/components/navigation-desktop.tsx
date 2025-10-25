@@ -34,7 +34,7 @@ export const DesktopNavigation = ({}: Props) => {
     return (
         <nav
             className={clsx(
-                'flex h-10 md:h-14 lg:h-16',
+                'flex h-10 md:h-10 lg:h-12',
                 'items-center justify-between'
             )}
         >

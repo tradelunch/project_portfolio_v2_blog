@@ -40,7 +40,9 @@ export const DashboardLayout = ({
                     <SidebarTrigger className="-mr-1 ml-auto rotate-180" />
                 </header>
 
-                {children}
+                <main className="flex flex-1 flex-col gap-4 p-4">
+                    {children}
+                </main>
             </SidebarInset>
 
             <AppSidebar side="right" />

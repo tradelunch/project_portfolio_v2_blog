@@ -64,7 +64,7 @@ export default function RootLayout({
                     enableSystem
                     disableTransitionOnChange
                 >
-                    <header className="sticky top-0 z-50 border-b-2 border-border bg-background">
+                    <header className="sticky top-0 z-50 border-b-2 border-foreground bg-background">
                         <div className="mx-auto max-w-[95vw] px-2">
                             <DesktopNavigation />
                         </div>

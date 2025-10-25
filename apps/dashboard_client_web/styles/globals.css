@@ -30,7 +30,6 @@ body {
 } */
 
 @import './shadcn.css';
-@import './shadcn.rose.css';
 
 @custom-variant dark (&:is(.dark *));
 
