@@ -23,6 +23,7 @@ export const establishDBConnection = async () => {
 	try {
 		await sequalizeP.authenticate();
 		console.log("Connection has been established successfully.");
+        return sequalizeP;
 	} catch (error) {
 		console.error("Unable to connect to the database:", error);
 	}

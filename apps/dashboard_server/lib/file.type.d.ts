@@ -1,12 +1,4 @@
-type TFileParams = {
-	localFilePath: string; // 로컬 업로드 대상 파일 경로
-	filename: string;
-	categories: string[];
-	tags: string[];
-	userId: string;
-};
-
-type TFileMeta = {
+export type TFileMeta = {
 	filename: string;
 	storedName: string;
 	storedUri: string;
@@ -14,3 +6,23 @@ type TFileMeta = {
 	tags: string[];
 };
 
+export type TImageFileMeta = {
+	// local
+	base: string;
+	folderPath: string;
+	slug: string;
+
+	// meta
+	buffer?: Buffer;
+	filename?: string;
+	storedName?: string;
+	storedUri?: string;
+
+	id?: string;
+	ext?: string;
+	userId?: number;
+	postId?: string;
+	contentType?: string;
+	fileSize?: number;
+	isThumbnail?: boolean;
+};
