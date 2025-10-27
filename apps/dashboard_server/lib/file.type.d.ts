@@ -6,7 +6,7 @@ export type TFileMeta = {
 	tags: string[];
 };
 
-export type TImageFileMeta = {
+export type TPostFileMeta = {
 	// local
 	base: string;
 	folderPath: string;
@@ -25,4 +25,11 @@ export type TImageFileMeta = {
 	contentType?: string;
 	fileSize?: number;
 	isThumbnail?: boolean;
+
+	// post meta
+	title?: string;
+	desc?: string;
+	date?: string;
+	status?: string;
+	content?: string;
 };

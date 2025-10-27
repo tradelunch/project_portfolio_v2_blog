@@ -1,5 +1,5 @@
 import { CustomSnowflake } from "@/lib/CustomSnowflake.module";
-import { TImageFileMeta } from "@/lib/file.type";
+import { TPostFileMeta } from "@/lib/file.type";
 import { AWS_S3_BUCKET } from "@/src/env.schema";
 import { s3 } from "@/src/lib/awsS3";
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
@@ -53,7 +53,7 @@ export const get_signed_uri_s3 = async (key: string) => {
 
 	return signedUrl;
 };
-export const upload_file_s3 = async (meta: TImageFileMeta) => {
+export const upload_file_s3 = async (meta: TPostFileMeta) => {
 	const fileBuffer = meta.buffer;
 
 	const key = `${meta.userId}/${meta.folderPath}/${meta.slug}/${meta.id}.${meta.ext}`;
