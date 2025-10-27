@@ -93,3 +93,50 @@ router.get("/:postid", async (req, res) => {
 		res.status(500).json({ success: false, message: "Failed to fetch post" });
 	}
 });
+
+/**
+ * @api {get} /posts/slug/:slug Get a single post by its slug and author's username
+ * @apiName GetPostBySlug
+ * @apiGroup Posts
+ *
+ * @apiParam {String} slug The unique slug of the post.
+ * @apiQuery {String} [username] Optional username to filter by author.
+ *
+ * @apiSuccess {Boolean} success Indicates if the request was successful.
+ * @apiSuccess {Object} data The most recent post object.
+ */
+router.get("/slug/:slug", async (req, res) => {
+	try {
+		const { slug } = req.params;
+		const { username } = req.query;
+
+		const query = `
+			SELECT p.*
+			FROM posts p
+			INNER JOIN users u ON p.user_id = u.id
+			WHERE p.slug = :slug
+			${username ? "AND u.username = :username" : ""}
+			ORDER BY p.created_at DESC
+			LIMIT 1
+		`;
+
+		const replacements = username ? { slug, username } : { slug };
+		const results = await sequalizeP.query(query, {
+			replacements,
+			type: QueryTypes.SELECT,
+		});
+
+		const post = results[0];
+
+		if (!post) {
+			return res
+				.status(404)
+				.json({ success: false, message: "Post not found" });
+		}
+
+		res.json({ success: true, data: post });
+	} catch (error) {
+		console.error(`API Error fetching post by slug ${req.params.slug}:`, error);
+		res.status(500).json({ success: false, message: "Failed to fetch post" });
+	}
+});
