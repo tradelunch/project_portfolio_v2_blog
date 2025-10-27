@@ -42,9 +42,9 @@ const data = {
             [
                 'api',
                 ['hello', ['route.ts']],
+                ['blog', ['page.tsx']],
                 'page.tsx',
                 'layout.tsx',
-                ['blog', ['page.tsx']],
             ],
         ],
         [
@@ -110,7 +110,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
 function Tree({ item }: { item: string | any[] }) {
     const [name, ...items] = Array.isArray(item) ? item : [item];
-    console.log('TREE ITEM:', item, name, items);
+    // console.log('TREE ITEM:', item, name, items);
 
     if (!items.length) {
         return (

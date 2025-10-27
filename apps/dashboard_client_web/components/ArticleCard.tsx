@@ -12,8 +12,10 @@ export function ArticleCard({ id, title, excerpt, image }: ArticleCardProps) {
         <article
             className={clsx(
                 'flex items-start gap-4',
+                'p-4',
                 'bg-background border border-foreground',
-                'p-4 shadow hover:shadow-lg transition group'
+                'hover:bg-secondary transition'
+                // 'p-4 shadow hover:shadow-lg transition group'
             )}
         >
             <img

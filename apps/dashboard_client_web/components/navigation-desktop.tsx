@@ -1,3 +1,4 @@
+import { ModeToggle } from '@/components/mode-toggle';
 import clsx from 'clsx';
 import Link from 'next/link';
 import React from 'react';
@@ -10,9 +11,9 @@ const LINKS = [
             'Find in-depth information about Turborepo features and API.',
     },
     {
-        title: 'dashboard',
-        href: '/dashboard',
-        description: 'Learn more about monorepos with our handbook.',
+        title: 'blog',
+        href: '/blog',
+        description: 'Technology blog',
     },
     {
         title: 'projects',
@@ -51,6 +52,9 @@ export const DesktopNavigation = ({}: Props) => {
                         </Link>
                     </li>
                 ))}
+                <li>
+                    <ModeToggle />
+                </li>
             </ul>
         </nav>
     );

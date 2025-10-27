@@ -23,10 +23,10 @@ const ibmPlexMono = IBM_Plex_Mono({
     variable: '--font-ibm-plex-mono',
 });
 
-const ibmPlexSans = IBM_Plex_Sans({
-    subsets: ['latin'],
-    variable: '--font-ibm-plex-sans',
-});
+// const ibmPlexSans = IBM_Plex_Sans({
+//     subsets: ['latin'],
+//     variable: '--font-ibm-plex-sans',
+// });
 
 export const metadata: Metadata = {
     title: 'Total Dashboard',
@@ -52,9 +52,9 @@ export default function RootLayout({
                 className={clsx(
                     // geist.className,
                     // ibmPlexSans.className,
-                    ibmPlexMono.className,
                     'flex min-h-screen flex-col',
                     'bg-background text-foreground antialiased'
+                    // ibmPlexMono.className
                 )}
             >
                 <ThemeProvider
