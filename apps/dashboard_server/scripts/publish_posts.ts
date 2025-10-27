@@ -36,7 +36,7 @@ const insertPost = async (
 	)) as Array<{ id: number }>;
 
 	const insertedId = results[0]?.id;
-    console.log('>> meta.id:', meta.id);
+	console.log(">> meta.id:", meta.id);
 	console.log(`>> Inserted post: ${insertedId}`);
 	return insertedId;
 };
@@ -49,8 +49,8 @@ const insertImage = async (
 	await db.query(
 		`
         INSERT INTO 
-            files (id, user_id, post_id, content_type, ext, filename, stored_name, stored_uri, file_size, is_thumbnail, created_at, updated_at, deleted_at)
-            VALUES (:id, :user_id, :post_id, :content_type, :ext, :filename, :stored_name, :stored_uri, :file_size, :is_thumbnail, NOW(), NOW(), NULL)
+            files (id, user_id, post_id, content_type, ext, original_filename, stored_name, stored_uri, file_size, is_thumbnail, created_at, updated_at, deleted_at)
+            VALUES (:id, :user_id, :post_id, :content_type, :ext, :original_filename, :stored_name, :stored_uri, :file_size, :is_thumbnail, NOW(), NOW(), NULL)
         `,
 		{
 			replacements: {
@@ -59,7 +59,7 @@ const insertImage = async (
 				user_id: meta.userId!,
 				content_type: meta.contentType,
 				ext: meta.ext,
-				filename: meta.filename,
+				original_filename: meta.filename,
 				stored_name: meta.storedName,
 				stored_uri: meta.storedUri,
 				file_size: meta.fileSize,

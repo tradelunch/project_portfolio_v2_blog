@@ -49,7 +49,7 @@ CREATE TABLE if not exists files (
     post_id         BIGINT,
     content_type    VARCHAR(100),
     ext             VARCHAR(30),
-    filename        VARCHAR(255) NOT NULL,
+    original_filename        VARCHAR(255) NOT NULL,
     stored_name     VARCHAR(255) NOT NULL,
     stored_uri      TEXT NOT NULL,
     file_size       INTEGER,

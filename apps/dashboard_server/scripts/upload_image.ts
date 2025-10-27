@@ -56,7 +56,7 @@ export const get_signed_uri_s3 = async (key: string) => {
 export const upload_file_s3 = async (meta: TPostFileMeta) => {
 	const fileBuffer = meta.buffer;
 
-	const key = `${meta.userId}/${meta.folderPath}/${meta.slug}/${meta.id}.${meta.ext}`;
+	const key = `${meta.userId}/${meta.folderPath}/${meta.slug}/${meta.slug}.${meta.ext}`;
 
 	const command = new PutObjectCommand({
 		Bucket: AWS_S3_BUCKET,
@@ -64,6 +64,7 @@ export const upload_file_s3 = async (meta: TPostFileMeta) => {
 		Body: fileBuffer,
 		ContentType: meta.contentType ?? "application/octet-stream",
 		Metadata: {
+			id: String(meta.id),
 			original_filename: meta.filename!,
 			content_type: meta.contentType!,
 			ext: meta.ext!,
