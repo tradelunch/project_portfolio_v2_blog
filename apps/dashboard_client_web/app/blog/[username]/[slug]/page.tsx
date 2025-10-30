@@ -1,5 +1,127 @@
 import axios from '@repo/axios';
 
+import ReactMarkdown from 'react-markdown';
+
+// remark plugins (operate on Markdown syntax)
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+import remarkMath from 'remark-math';
+
+// rehype
+import rehypeRaw from 'rehype-raw';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeKatex from 'rehype-katex';
+import rehypePrismPlus from 'rehype-prism-plus';
+
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+// import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
+// import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+// ...existing code...
+
+// syntax highlighting style (optional)
+import 'katex/dist/katex.min.css';
+// import 'highlight.js/styles/github-dark.css';
+// import 'prism-themes/themes/prism-one-dark.css';
+// 또는
+import 'prism-themes/themes/prism-vsc-dark-plus.css';
+
+const MarkdownRenderer = ({ content }: { content: string }) => {
+    return (
+        <ReactMarkdown
+            // Parse and render Markdown to React
+            remarkPlugins={[
+                remarkGfm, // tables, strikethrough, autolinks
+                remarkBreaks, // treat line breaks as <br>
+                remarkMath, // support $...$ and $$...$$ math
+            ]}
+            rehypePlugins={[
+                rehypeRaw,
+                rehypeSlug,
+                [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+                rehypeKatex,
+                [rehypePrismPlus, { showLineNumbers: true }], // syntax highlighting
+            ]}
+            components={{
+                h1: ({ node, ...props }) => (
+                    <h1
+                        className="text-3xl font-bold mt-8 mb-4 border-b border-gray-300 pb-2"
+                        {...props}
+                    />
+                ),
+                h2: ({ node, ...props }) => (
+                    <h2
+                        className="text-2xl font-semibold mt-6 mb-3"
+                        {...props}
+                    />
+                ),
+                p: ({ node, ...props }) => (
+                    <p
+                        className="my-2 leading-relaxed text-gray-800 dark:text-gray-200"
+                        {...props}
+                    />
+                ),
+                pre: ({ node, ...props }) => (
+                    <pre
+                        className="rounded-lg my-3 overflow-x-auto bg-[#282c34] text-gray-100 p-4"
+                        {...props}
+                    />
+                ),
+                code({ inline, className, children, ...props }) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    return !inline && match ? (
+                        <SyntaxHighlighter
+                            style={oneDark}
+                            language={match[1]}
+                            PreTag="div"
+                            {...props}
+                        >
+                            {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                    ) : (
+                        <code
+                            className="bg-gray-800 text-gray-100 px-1 py-0.5 rounded"
+                            {...props}
+                        >
+                            {children}
+                        </code>
+                    );
+                },
+                a: ({ node, ...props }) => (
+                    <a
+                        className="text-blue-600 hover:underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        {...props}
+                    />
+                ),
+                ul: ({ node, ...props }) => (
+                    <ul
+                        className="list-disc ml-6 mb-3"
+                        {...props}
+                    />
+                ),
+                ol: ({ node, ...props }) => (
+                    <ol
+                        className="list-decimal ml-6 mb-3"
+                        {...props}
+                    />
+                ),
+                blockquote: ({ node, ...props }) => (
+                    <blockquote
+                        className="border-l-4 border-gray-400 pl-4 italic text-gray-600"
+                        {...props}
+                    />
+                ),
+            }}
+            // className="prose prose-lg max-w-none dark:prose-invert"
+        >
+            {content || ''}
+        </ReactMarkdown>
+    );
+};
+
 type Props = {
     params: { slugs?: string[] };
 };
@@ -38,10 +160,9 @@ const Page = async ({ params }: Props) => {
             <div className="text-gray-500 text-sm mb-2">
                 작성자: {post.user_id}
             </div>
-            {/* Optionally render markdown content here, for now just raw */}
-            <div>{post.content}</div>
+
+            <MarkdownRenderer content={post.content || ''} />
         </div>
     );
 };
-
 export default Page;

@@ -1,5 +1,20 @@
 import * as React from 'react';
+
 import { ChevronRight, File, Folder } from 'lucide-react';
+
+import {
+    AudioWaveform,
+    Blocks,
+    Calendar,
+    Command,
+    Home,
+    Inbox,
+    MessageCircleQuestion,
+    Search,
+    Settings2,
+    Sparkles,
+    Trash2,
+} from 'lucide-react';
 
 import {
     Collapsible,
@@ -12,6 +27,7 @@ import {
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
+    SidebarHeader,
     SidebarMenu,
     SidebarMenuBadge,
     SidebarMenuButton,
@@ -19,21 +35,45 @@ import {
     SidebarMenuSub,
     SidebarRail,
 } from '@/components/ui/sidebar';
+import { TeamSwitcher } from '@/components/team-switcher';
+import clsx from 'clsx';
+import Link from 'next/link';
 
 // This is sample data.
 const data = {
-    changes: [
+    teams: [
         {
-            file: 'README.md',
-            state: 'M',
+            name: 'Acme Inc',
+            logo: Command,
+            plan: 'Enterprise',
         },
         {
-            file: 'api/hello/route.ts',
-            state: 'U',
+            name: 'Acme Corp.',
+            logo: AudioWaveform,
+            plan: 'Startup',
         },
         {
-            file: 'app/layout.tsx',
-            state: 'M',
+            name: 'Evil Corp.',
+            logo: Command,
+            plan: 'Free',
+        },
+    ],
+    headers: [
+        {
+            file: 'ABOUT',
+            href: '',
+            // state: 'M',
+        },
+        {
+            file: 'PROJECTS',
+            href: 'projects',
+
+            // state: 'U',
+        },
+        {
+            file: 'RESUME',
+            href: 'resume',
+            // state: 'M',
         },
     ],
     tree: [
@@ -65,23 +105,49 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const name = 'Taek Lim';
+    const username = 'taeklim';
+
     return (
         <Sidebar {...props}>
+            <SidebarHeader>
+                <div
+                    className={clsx(
+                        'flex gap-2 justify-start align-middle',
+                        'px-1.5'
+                    )}
+                >
+                    <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
+                        <Link href="/">
+                            <Command className="size-5" />
+                        </Link>
+                    </div>
+                    <span className="truncate font-semibold text-2xl">
+                        <Link href={`/blog/@${username}`}>{name}</Link>
+                    </span>
+                </div>
+            </SidebarHeader>
+
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarGroupLabel>Changes</SidebarGroupLabel>
+                    <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel>
 
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {data.changes.map((item, index) => (
+                            {data.headers.map((item, index) => (
                                 <SidebarMenuItem key={index}>
-                                    <SidebarMenuButton>
-                                        <File />
-                                        {item.file}
-                                    </SidebarMenuButton>
-                                    <SidebarMenuBadge>
+                                    <Link
+                                        href={`/blog/@${username}/${item.href}`}
+                                    >
+                                        <SidebarMenuButton>
+                                            <File />
+                                            {item.file}
+                                        </SidebarMenuButton>
+                                    </Link>
+
+                                    {/* <SidebarMenuBadge>
                                         {item.state}
-                                    </SidebarMenuBadge>
+                                    </SidebarMenuBadge> */}
                                 </SidebarMenuItem>
                             ))}
                         </SidebarMenu>
