@@ -6,8 +6,15 @@ export const config = {
 		"^.+\\.(ts|tsx)$": "ts-jest",
 	},
 	moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+	testMatch: [
+		"<rootDir>/**/__test__/**/*.(spec|test).{ts,tsx}",
+		"<rootDir>/**/src/**/*.(spec|test).{ts,tsx}",
+	],
+	moduleNameMapper: {
+		"^@/(.*)$": "<rootDir>/$1",
+	},
 	collectCoverageFrom: [
-		"<rootDir>/packages/**/*.{ts,tsx}",
+		"<rootDir>/**/*.{ts,tsx}",
 		"!**/node_modules/**",
 		"!**/dist/**",
 	],
