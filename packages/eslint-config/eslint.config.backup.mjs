@@ -16,8 +16,8 @@ const eslintConfig = [
     {
         ignores: [
             'src/feature/blog/deprecated/**',
-            'src/pages/blog/deprecated/**'
-        ]
+            'src/pages/blog/deprecated/**',
+        ],
     },
     ...compat.extends('next/core-web-vitals', 'next/typescript'),
     ...compat.config({
@@ -33,7 +33,6 @@ const eslintConfig = [
             {
                 files: ['**/*/*.ts', '**/*.tsx'],
                 plugins: [
-
                     '@typescript-eslint',
                     // '@typescript-eslint/internal',
                     // 'deprecation',
