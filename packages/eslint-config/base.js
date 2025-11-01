@@ -30,6 +30,13 @@ export const config = [
 		},
 	},
 	{
-		ignores: ["dist/**"],
+		ignores: [
+			"dist/**",
+			".turbo/**",
+			"coverage/**",
+			"out/**",
+			"build/**",
+			"node_modules/**",
+		],
 	},
 ];
