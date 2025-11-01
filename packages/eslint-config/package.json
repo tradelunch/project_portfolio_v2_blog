@@ -7,7 +7,7 @@
         "./base": "./base.js",
         "./next-js": "./next.js",
         "./react-internal": "./react-internal.js",
-        "./package": "./typescript.package.js"
+        "./package": "./package.js"
     },
     "devDependencies": {
         "@eslint/js": "^9.33.0",
