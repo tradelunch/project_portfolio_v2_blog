@@ -29,8 +29,9 @@ CREATE TABLE if not exists users (
 );
 
 insert into users (username, email)
+VALUES ('darkowlrising', 'darkowlrising@gmail.com');
+insert into users (username, email)
 VALUES ('taeklim', 'tio.taek.lim@gmail.com');
-
 -- ===========================
 -- POSTS TABLE
 -- ===========================

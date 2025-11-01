@@ -3,7 +3,7 @@ import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
 import type { VFile } from 'vfile';
 
-import type { TTocItem, TNestedTocItem } from '@/types/markdown.types';
+import type { TTocItem, TNestedTocItem } from '@/src/types';
 
 export const tocPlugin = () => {
     return (tree: Root, file: VFile) => {

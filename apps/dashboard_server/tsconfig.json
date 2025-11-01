@@ -1,23 +1,23 @@
 {
-	"extends": "@repo/typescript-config/node-library.json",
-	"compilerOptions": {
-		"outDir": "dist",
-		"rootDir": ".",
-		"baseUrl": ".",
-		"paths": {
-			"@": ["."],
-			"@/*": ["./*"]
-		},
-		"typeRoots": ["./node_modules/@types", "./types"]
-	},
-	"include": [
-		"src/**/*",
-		"types/**/*",
-		"types/global.d.ts",
-		"**/*.d.ts",
-		"**/lib/*",
-		"modules",
-		"scripts"
-	],
-	"exclude": ["node_modules"]
+    "extends": "@repo/typescript-config/node-library.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        "rootDir": ".",
+        "baseUrl": ".",
+        "paths": {
+            "@": ["."],
+            "@/*": ["./*"]
+        },
+        "typeRoots": ["node_modules/@types", "types"]
+    },
+    "include": [
+        "src/**/*",
+        "types/**/*",
+        "types/global.d.ts",
+        "**/*.d.ts",
+        "**/lib/*",
+        "modules",
+        "scripts"
+    ],
+    "exclude": ["node_modules"]
 }

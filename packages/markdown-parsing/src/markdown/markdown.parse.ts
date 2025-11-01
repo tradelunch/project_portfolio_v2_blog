@@ -6,8 +6,7 @@ import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import { tocPlugin } from '@/src/markdown/markdown.toc';
 
-import type { TProcessedMarkdown } from '@/types/markdown.types';
-import type { TTocItem } from '@/types/markdown.types';
+import type { TProcessedMarkdown, TTocItem } from '@/src/types';
 
 import rehypeHighlight from 'rehype-highlight';
 

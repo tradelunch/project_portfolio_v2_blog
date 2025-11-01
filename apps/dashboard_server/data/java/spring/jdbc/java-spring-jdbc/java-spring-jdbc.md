@@ -3,8 +3,8 @@ title: "java spring jdbc"
 tags: [java, spring, jdbc]
 desc: Spring Boot 프로젝트에서 spring-session-jdbc, spring-boot-starter-data-jdbc, spring-boot-starter-jdbc의 역할과 사용처를 설명해 드리겠습니다.
 date: 2025-10-26 18:31:03
-userId: 1
-username: darkowlrising
+userId: 2
+username: taeklim
 status: false
 ---
 

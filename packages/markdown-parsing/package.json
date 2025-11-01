@@ -3,17 +3,26 @@
     "license": "MIT",
     "version": "0.1.0",
     "type": "module",
-    "main": "dist/index.cjs.js",
-    "module": "dist/index.esm.js",
+    "main": "dist/index.cjs",
+    "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
     "files": [
         "dist"
     ],
     "exports": {
         ".": {
-            "require": "./dist/index.cjs.js",
-            "import": "./dist/index.esm.js",
+            "require": "./dist/index.cjs",
+            "import": "./dist/index.mjs",
             "types": "./dist/index.d.ts"
+        },
+        "./add": {
+            "types": "./dist/add.d.ts",
+            "require": "./dist/add.cjs",
+            "import": "./dist/add.mjs"
+        },
+        "./types": {
+            "types": "./src/types/inde.ts",
+            "default": "./dist/index.js"
         }
     },
     "scripts": {
@@ -28,6 +37,7 @@
     },
     "peerDependencies": {},
     "devDependencies": {
+        "@repo/typescript-config": "*",
         "@rollup/plugin-commonjs": "^29.0.0",
         "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^16.0.3",
