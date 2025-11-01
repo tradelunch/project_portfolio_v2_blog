@@ -4,5 +4,10 @@ export default function Page() {
     // We use `process.cwd()` which points to the root in a Turborepo setup.
 
     // const fileContent = await fs.readFile(testFilePath, "utf8");
-    return <section className="p-4">home</section>;
+    return (
+        <section className="p-4">
+            <div>home</div>
+            <div>test</div>
+        </section>
+    );
 }

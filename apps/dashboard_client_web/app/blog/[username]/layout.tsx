@@ -8,7 +8,9 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+
 import { Separator } from '@/components/ui/separator';
+
 import {
     SidebarInset,
     SidebarProvider,
@@ -16,15 +18,10 @@ import {
 } from '@/components/ui/sidebar';
 import clsx from 'clsx';
 
-export const DashboardLayout = ({
-    children,
-}: {
-    children: React.ReactNode;
-}) => {
+export const BlogUserLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <SidebarProvider>
             <AppSidebar side="left" />
-
             <SidebarInset>
                 <SiteHeader />
 
@@ -36,4 +33,4 @@ export const DashboardLayout = ({
     );
 };
 
-export default DashboardLayout;
+export default BlogUserLayout;

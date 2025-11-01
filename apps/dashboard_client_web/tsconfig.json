@@ -27,5 +27,6 @@
         ".next/types/**/*.ts",
         "**/types/*.ts"
     ],
+
     "exclude": ["node_modules", "__backup__"]
 }
