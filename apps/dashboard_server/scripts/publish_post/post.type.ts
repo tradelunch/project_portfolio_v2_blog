@@ -32,4 +32,7 @@ export type TPostFileMeta = {
 	date?: string;
 	status?: string;
 	content?: string;
+	categories?: string[];
+	categoryId?: number;
+	tags?: string[];
 };

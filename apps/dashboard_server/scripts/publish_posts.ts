@@ -1,81 +1,25 @@
 import { CustomSnowflake } from "@/lib/CustomSnowflake.module";
 import { extractMarkdownFile } from "@/lib/extract.file.lib";
-import { TPostFileMeta } from "@/lib/file.type";
-import { PostFileNode } from "@/lib/FileSystem.model";
+import { insertCategories } from "@/scripts/publish_post/insert_categories";
+import { insertImage } from "@/scripts/publish_post/insert_image";
+import { insertPost } from "@/scripts/publish_post/insert_post";
 import {
 	DEFAULT_USER_ID,
 	load_local_file,
 	upload_file_s3,
-} from "@/scripts/upload_image";
+} from "@/scripts/publish_post/upload_image";
+
 import { establishDBConnection } from "@/src/db";
+import { CDN_ASSET_POSTS } from "@/src/env.schema";
 import { QueryTypes, Sequelize, Transaction } from "sequelize";
 
-const insertPost = async (
-	db: Sequelize,
-	meta: TPostFileMeta,
-	tx: Transaction
-) => {
-	const results = (await db.query(
-		`
-        INSERT INTO posts (id, user_id, title, content, status, created_at, updated_at, slug)
-        VALUES (:id, :user_id, :title, :content, :status, NOW(), NOW(), :slug)
-        RETURNING id
-	`,
-		{
-			replacements: {
-				id: meta.id,
-				slug: meta.slug,
-				user_id: meta.userId,
-				title: meta.title,
-				content: meta.content,
-				status: meta.status || "public",
-			},
-			type: QueryTypes.SELECT,
-			transaction: tx,
-		}
-	)) as Array<{ id: number }>;
-
-	const insertedId = results[0]?.id;
-	console.log(">> meta.id:", meta.id);
-	console.log(`>> Inserted post: ${insertedId}`);
-	return insertedId;
-};
-
-const insertImage = async (
-	db: Sequelize,
-	meta: TPostFileMeta,
-	tx: Transaction
-) => {
-	await db.query(
-		`
-        INSERT INTO 
-            files (id, user_id, post_id, content_type, ext, original_filename, stored_name, stored_uri, file_size, is_thumbnail, created_at, updated_at, deleted_at)
-            VALUES (:id, :user_id, :post_id, :content_type, :ext, :original_filename, :stored_name, :stored_uri, :file_size, :is_thumbnail, NOW(), NOW(), NULL)
-        `,
-		{
-			replacements: {
-				id: meta.id!,
-				post_id: meta.postId!,
-				user_id: meta.userId!,
-				content_type: meta.contentType,
-				ext: meta.ext,
-				original_filename: meta.filename,
-				stored_name: meta.storedName,
-				stored_uri: meta.storedUri,
-				file_size: meta.fileSize,
-				is_thumbnail: true,
-			},
-			transaction: tx,
-		}
-	);
-	console.log(`Inserted image meta for post_id=${meta.postId}`);
-};
+import { type TPostFileMeta } from "@/scripts/publish_post/post.type";
 
 const run = async () => {
 	const base = "data";
 	const folderPath = "java/spring/jdbc";
 	const slug = "java-spring-jdbc";
-	const ext = "png";
+	const fileExt = "png";
 
 	const extractedMDFile = extractMarkdownFile(base, folderPath, slug);
 
@@ -96,7 +40,7 @@ const run = async () => {
 			base,
 			folderPath,
 			slug,
-			filename: `${slug}.${ext}`,
+			filename: `${slug}.${fileExt}`,
 			userId: DEFAULT_USER_ID,
 
 			// post meta
@@ -105,31 +49,50 @@ const run = async () => {
 			date: extractedMDFile.date,
 			status: extractedMDFile.status,
 			content: extractedMDFile.content,
+			categories: folderPath.split("/"),
 		};
-
-		// 1. insert post
-		await insertPost(db, meta, tx);
 
 		// 2. load local file
 		const { buffer, contentType, fullPath, fileSize } = await load_local_file(
 			base,
 			folderPath,
 			slug,
-			ext
+			fileExt
 		);
 
 		// 3. upload file to S3
 		meta = {
 			...meta,
-			filename: `${slug}.${ext}`,
+			filename: `${slug}.${fileExt}`,
 			buffer,
 			contentType,
-			ext,
+			ext: fileExt,
 			fileSize,
 			isThumbnail: true,
 		};
 
 		meta = await upload_file_s3(meta);
+
+		const thumbnail_url = `${CDN_ASSET_POSTS}/${meta.storedUri}`;
+
+		// Regex: matches ![Alt text](./filename.png "Title")
+		const updated = meta.content?.replace(
+			/!\[([^\]]*)\]\(\.\/([^)\s]+)(?:\s+"([^"]*)")?\)/g,
+			(_, alt, filename, title) => {
+				return title
+					? `![${alt}](${thumbnail_url} "${title}")`
+					: `![${alt}](${thumbnail_url})`;
+			}
+		);
+
+		meta.content = updated || meta.content;
+
+		// 1. insert categories
+		const categoryId = await insertCategories(db, meta, tx);
+		meta.categoryId = categoryId;
+
+		// 2. insert post
+		await insertPost(db, meta, tx);
 
 		// 4. insert image meta (same transaction)
 		await insertImage(db, meta, tx);

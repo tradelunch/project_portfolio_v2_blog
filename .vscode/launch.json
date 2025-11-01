@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/tio/Documents/_00_ucm_mscs_graduate/ucm_cs5900_compiler_design_construction/hw2",
+      "program": "/Users/tio/Documents/_00_ucm_mscs_graduate/ucm_cs5900_compiler_design_construction/hw2/build/Debug/outDebug"
+    }
+  ]
+}

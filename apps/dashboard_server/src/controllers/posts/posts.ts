@@ -60,6 +60,92 @@ router.get(
 );
 
 /**
+ * @api {get} /posts/user/:username Get posts by a specific user
+ * @apiName GetUserPosts
+ * @apiGroup Posts
+ *
+ * @apiParam {String} username The username of the author.
+ * @apiParam {Number} [page=1] Page number for pagination.
+ * @apiParam {Number} [limit=20] Number of posts per page.
+ *
+ * @apiSuccess {Boolean} success Indicates if the request was successful.
+ * @apiSuccess {Object[]} data List of the user's most recent posts for each slug.
+ * @apiSuccess {Number} total Total number of unique posts (by slug).
+ * @apiSuccess {Number} page Current page number.
+ * @apiSuccess {Number} totalPages Total number of pages.
+ */
+router.get(
+	"/user/:username",
+	async (
+		req: Request<
+			{ username: string },
+			{},
+			{},
+			{ page?: string; limit?: string }
+		>,
+		res
+	) => {
+		try {
+			const { username } = req.params;
+			const page = parseInt(req.query.page || "1", 10);
+			const limit = parseInt(req.query.limit || "20", 10);
+			const offset = (page - 1) * limit;
+
+			// Subquery to get the count of unique posts by slug for the user
+			const countQuery = `
+				SELECT COUNT(DISTINCT p.slug)
+				FROM posts p
+				INNER JOIN users u ON p.user_id = u.id
+				WHERE u.username = :username
+			`;
+			const countResult: { count: string }[] = await sequalizeP.query(
+				countQuery,
+				{ replacements: { username }, type: QueryTypes.SELECT }
+			);
+			const count = parseInt(countResult[0].count, 10);
+
+			// This query fetches the latest version of each post for a given user, identified by slug.
+			// It uses a window function to rank posts with the same slug by their creation date.
+			const postsQuery = `
+				WITH ranked_posts AS (
+					SELECT
+						p.*,
+						f.stored_uri,
+						ROW_NUMBER() OVER(PARTITION BY p.slug ORDER BY p.created_at DESC) as rn
+					FROM posts p
+					INNER JOIN users u ON p.user_id = u.id
+					LEFT JOIN files f ON p.id = f.post_id AND f.is_thumbnail = true
+					WHERE u.username = :username
+				)
+				SELECT *
+				FROM ranked_posts
+				WHERE rn = 1
+				ORDER BY created_at DESC
+				LIMIT :limit OFFSET :offset
+			`;
+
+			const rows = await sequalizeP.query(postsQuery, {
+				replacements: { username, limit, offset },
+				type: QueryTypes.SELECT,
+			});
+
+			res.json({
+				success: true,
+				data: rows,
+				total: count,
+				page: page,
+				totalPages: Math.ceil(count / limit) || 0,
+			});
+		} catch (error) {
+			console.error("API Error fetching user posts:", error);
+			res
+				.status(500)
+				.json({ success: false, message: "Failed to fetch posts" });
+		}
+	}
+);
+
+/**
  * @api {get} /posts/:postid Get a single post by its ID
  * @apiName GetPostById
  * @apiGroup Posts

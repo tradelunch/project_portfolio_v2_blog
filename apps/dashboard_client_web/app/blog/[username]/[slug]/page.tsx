@@ -1,6 +1,6 @@
 import axios from '@repo/axios';
 
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown, { Components } from 'react-markdown';
 
 // remark plugins (operate on Markdown syntax)
 import remarkGfm from 'remark-gfm';
@@ -14,108 +14,117 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeKatex from 'rehype-katex';
 import rehypePrismPlus from 'rehype-prism-plus';
 
+import { getTranslations } from 'next-intl/server';
+
+// styles
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
-// import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
-// import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-// ...existing code...
-
-// syntax highlighting style (optional)
 import 'katex/dist/katex.min.css';
-// import 'highlight.js/styles/github-dark.css';
-// import 'prism-themes/themes/prism-one-dark.css';
-// 또는
-import 'prism-themes/themes/prism-vsc-dark-plus.css';
+
+import { TableOfContents } from 'lucide-react';
+import { MarkdownProcessor } from '@/utils/markdown.toc';
+import { markdownToReact } from '@/utils';
+import clsx from 'clsx';
+
+const remarkPlugins = [
+    remarkGfm, // tables, strikethrough, autolinks
+    remarkBreaks, // treat line breaks as <br>
+    remarkMath, // support $...$ and $$...$$ math
+];
+
+const rehypePlugins: any = [
+    rehypeRaw,
+    rehypeSlug,
+    [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+    rehypeKatex,
+    // [rehypePrismPlus, { showLineNumbers: true }], // syntax highlighting
+];
+
+const remarkComponents: any = {
+    h1: ({ node, ...props }: any) => (
+        <h1
+            className="text-3xl font-semibold my-4  pb-2 text-primary"
+            {...props}
+        />
+    ),
+    h2: ({ node, ...props }: any) => (
+        <h2
+            className="text-2xl font-semibold my-3"
+            {...props}
+        />
+    ),
+    h3: ({ node, ...props }: any) => (
+        <h3
+            className="text-xl font-semibold my-2"
+            {...props}
+        />
+    ),
+    p: ({ node, ...props }: any) => (
+        <p
+            className="my-2 leading-relaxed text-gray-800 dark:text-gray-200"
+            {...props}
+        />
+    ),
+    pre: ({ node, ...props }: any) => (
+        <pre
+            className="rounded-lg my-3 overflow-x-auto bg-[#282c34] text-gray-100 p-4"
+            {...props}
+        />
+    ),
+    code({ inline, className, children, ...props }: any) {
+        const match = /language-(\w+)/.exec(className || '');
+        return !inline && match ? (
+            <SyntaxHighlighter
+                style={oneDark}
+                language={match[1]}
+                PreTag="div"
+                {...props}
+            >
+                {String(children).replace(/\n$/, '')}
+            </SyntaxHighlighter>
+        ) : (
+            <code
+                className="bg-gray-800 text-gray-100 px-1 py-0.5 rounded"
+                {...props}
+            >
+                {children}
+            </code>
+        );
+    },
+    a: ({ node, ...props }: any) => (
+        <a
+            className="text-primary hover:underline hover:text-destructive"
+            // target="_blank"
+            rel="noopener noreferrer"
+            {...props}
+        />
+    ),
+    ul: ({ node, ...props }: any) => (
+        <ul
+            className="list-disc ml-6 mb-3"
+            {...props}
+        />
+    ),
+    ol: ({ node, ...props }: any) => (
+        <ol
+            className="list-decimal ml-6 mb-3"
+            {...props}
+        />
+    ),
+    blockquote: ({ node, ...props }: any) => (
+        <blockquote
+            className="border-l-4 border-gray-400 pl-4 italic text-gray-600"
+            {...props}
+        />
+    ),
+};
 
 const MarkdownRenderer = ({ content }: { content: string }) => {
     return (
         <ReactMarkdown
-            // Parse and render Markdown to React
-            remarkPlugins={[
-                remarkGfm, // tables, strikethrough, autolinks
-                remarkBreaks, // treat line breaks as <br>
-                remarkMath, // support $...$ and $$...$$ math
-            ]}
-            rehypePlugins={[
-                rehypeRaw,
-                rehypeSlug,
-                [rehypeAutolinkHeadings, { behavior: 'wrap' }],
-                rehypeKatex,
-                [rehypePrismPlus, { showLineNumbers: true }], // syntax highlighting
-            ]}
-            components={{
-                h1: ({ node, ...props }) => (
-                    <h1
-                        className="text-3xl font-bold mt-8 mb-4 border-b border-gray-300 pb-2"
-                        {...props}
-                    />
-                ),
-                h2: ({ node, ...props }) => (
-                    <h2
-                        className="text-2xl font-semibold mt-6 mb-3"
-                        {...props}
-                    />
-                ),
-                p: ({ node, ...props }) => (
-                    <p
-                        className="my-2 leading-relaxed text-gray-800 dark:text-gray-200"
-                        {...props}
-                    />
-                ),
-                pre: ({ node, ...props }) => (
-                    <pre
-                        className="rounded-lg my-3 overflow-x-auto bg-[#282c34] text-gray-100 p-4"
-                        {...props}
-                    />
-                ),
-                code({ inline, className, children, ...props }) {
-                    const match = /language-(\w+)/.exec(className || '');
-                    return !inline && match ? (
-                        <SyntaxHighlighter
-                            style={oneDark}
-                            language={match[1]}
-                            PreTag="div"
-                            {...props}
-                        >
-                            {String(children).replace(/\n$/, '')}
-                        </SyntaxHighlighter>
-                    ) : (
-                        <code
-                            className="bg-gray-800 text-gray-100 px-1 py-0.5 rounded"
-                            {...props}
-                        >
-                            {children}
-                        </code>
-                    );
-                },
-                a: ({ node, ...props }) => (
-                    <a
-                        className="text-blue-600 hover:underline"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        {...props}
-                    />
-                ),
-                ul: ({ node, ...props }) => (
-                    <ul
-                        className="list-disc ml-6 mb-3"
-                        {...props}
-                    />
-                ),
-                ol: ({ node, ...props }) => (
-                    <ol
-                        className="list-decimal ml-6 mb-3"
-                        {...props}
-                    />
-                ),
-                blockquote: ({ node, ...props }) => (
-                    <blockquote
-                        className="border-l-4 border-gray-400 pl-4 italic text-gray-600"
-                        {...props}
-                    />
-                ),
-            }}
-            // className="prose prose-lg max-w-none dark:prose-invert"
+            remarkPlugins={remarkPlugins}
+            rehypePlugins={rehypePlugins}
+            components={remarkComponents}
         >
             {content || ''}
         </ReactMarkdown>
@@ -129,7 +138,11 @@ type Props = {
 const Page = async ({ params }: Props) => {
     const { username, slug } = (await params) as any; // undefined인 경우 빈 배열 처리
     const decodedUsername = decodeURIComponent(username).substring(1);
+
+    const t = await getTranslations('common');
+
     console.log('username:', decodedUsername, 'slug:', slug);
+    console.log('ping:', t('ping'));
 
     if (!slug) {
         return <div>잘못된 접근입니다. (No slug provided)</div>;
@@ -138,9 +151,9 @@ const Page = async ({ params }: Props) => {
     // Fetch post data from API using axios instance
     let post: any = null;
     let error = null;
+
     try {
         const res = await axios.get(`/v1/api/posts/slug/${slug}`);
-        console.log(res);
         post = res.data;
     } catch (e: any) {
         error =
@@ -150,18 +163,25 @@ const Page = async ({ params }: Props) => {
     if (error) {
         return <div>포스트를 불러올 수 없습니다: {error}</div>;
     }
+
     if (!post) {
         return <div>포스트가 존재하지 않습니다.</div>;
     }
 
     return (
-        <div className="prose max-w-2xl mx-auto py-8">
-            <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
-            <div className="text-gray-500 text-sm mb-2">
-                작성자: {post.user_id}
-            </div>
-
+        <div
+            className={clsx(
+                'prose max-w-2xl mx-auto p-4',
+                'text-sm',
+                'bg-secondary',
+                'border border-primary rounded-lg'
+            )}
+        >
             <MarkdownRenderer content={post.content || ''} />
+
+            <div className="text-gray-500 text-sm mb-2">
+                작성자: {decodedUsername}
+            </div>
         </div>
     );
 };

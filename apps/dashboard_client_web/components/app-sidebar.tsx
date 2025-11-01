@@ -38,6 +38,7 @@ import {
 import { TeamSwitcher } from '@/components/team-switcher';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { ModeToggle } from '@/components/mode-toggle';
 
 // This is sample data.
 const data = {
@@ -61,6 +62,11 @@ const data = {
     headers: [
         {
             file: 'ABOUT',
+            href: 'about',
+            // state: 'M',
+        },
+        {
+            file: 'BLOG',
             href: '',
             // state: 'M',
         },
@@ -113,18 +119,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarHeader>
                 <div
                     className={clsx(
-                        'flex gap-2 justify-start align-middle',
+                        'flex justify-between align-middle',
                         'px-1.5'
                     )}
                 >
-                    <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                        <Link href="/">
-                            <Command className="size-5" />
-                        </Link>
+                    <div className={clsx('flex gap-2')}>
+                        <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
+                            <Link href="/">
+                                <Command className="size-5" />
+                            </Link>
+                        </div>
+
+                        <span className="truncate font-semibold text-2xl">
+                            <Link href={`/blog/@${username}`}>{name}</Link>
+                        </span>
                     </div>
-                    <span className="truncate font-semibold text-2xl">
-                        <Link href={`/blog/@${username}`}>{name}</Link>
-                    </span>
+
+                    <ModeToggle />
                 </div>
             </SidebarHeader>
 

@@ -4,12 +4,13 @@ import clsx from 'clsx';
 import { ClientTrailCursorCanvas } from '../components/ClientTrailCursorCanvas';
 import { ClientTrailCursorDom } from '../components/ClientTrailCursorDom';
 
+import { ThemeProvider } from '@/components/theme-provider';
+
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
+
 import '@repo/ui/styles.css';
 import '@/styles/globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
-import { ModeToggle } from '@/components/mode-toggle';
-import { DesktopNavigation } from '@/components/navigation-desktop';
-import { NavigationMenuDemo } from '@/components/navigation-header';
 
 const geist = Geist({
     subsets: ['latin'],
@@ -34,14 +35,17 @@ export const metadata: Metadata = {
         'computer science, cs, software, trading, investment, inflation',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const locale = await getLocale(); // SSR 시점에서 locale 추출
+    const messages = await getMessages(); // getRequestConfig 결과 자동 적용됨
+
     return (
         <html
-            lang="en"
+            lang={locale}
             className={clsx(
                 // geist.variable,
                 // ibmPlexSans.variable,
@@ -57,28 +61,33 @@ export default function RootLayout({
                     // ibmPlexMono.className
                 )}
             >
-                <ThemeProvider
-                    // attribute="data-theme"
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange
+                <NextIntlClientProvider
+                    locale={locale}
+                    messages={messages}
                 >
-                    {/* <header className="sticky top-0 z-50 border-b-2 border-foreground bg-background">
+                    <ThemeProvider
+                        // attribute="data-theme"
+                        attribute="class"
+                        defaultTheme="system"
+                        enableSystem
+                        disableTransitionOnChange
+                    >
+                        {/* <header className="sticky top-0 z-50 border-b-2 border-foreground bg-background">
                         <div className="mx-auto max-w-[95vw] px-2">
                             <DesktopNavigation />
                         </div>
                     </header> */}
 
-                    {/* <header className={clsx('flex')}>
+                        {/* <header className={clsx('flex')}>
                         <NavigationMenuDemo />
                     </header> */}
-                    <main className="flex-1">{children}</main>
+                        <main className="flex-1">{children}</main>
 
-                    {/* <footer>Main footer</footer> */}
-                    <ClientTrailCursorCanvas />
-                    <ClientTrailCursorDom />
-                </ThemeProvider>
+                        {/* <footer>Main footer</footer> */}
+                        <ClientTrailCursorCanvas />
+                        <ClientTrailCursorDom />
+                    </ThemeProvider>
+                </NextIntlClientProvider>
             </body>
         </html>
     );

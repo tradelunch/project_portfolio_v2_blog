@@ -1,5 +1,5 @@
 ---
-title: "spring boot jdbc"
+title: "java spring jdbc"
 tags: [java, spring, jdbc]
 desc: Spring Boot 프로젝트에서 spring-session-jdbc, spring-boot-starter-data-jdbc, spring-boot-starter-jdbc의 역할과 사용처를 설명해 드리겠습니다.
 date: 2025-10-26 18:31:03
@@ -8,9 +8,11 @@ username: darkowlrising
 status: false
 ---
 
-![Profile Picture](./java-spring-jdbc.png "Spring JDBC")
 
-# Spring: start-jdbc vs data-jdbc vs session-jdbc
+# java spring jdbc
+
+![java-spring-jdbc thumbnail](./java-spring-jdbc.png)
+
 
 Spring Boot 프로젝트에서 spring-session-jdbc, spring-boot-starter-data-jdbc, spring-boot-starter-jdbc의 역할과 사용처를 설명해 드리겠습니다.
 
@@ -32,7 +34,7 @@ Spring Boot 프로젝트에서 spring-session-jdbc, spring-boot-starter-data-jdb
 
 **✅ 사용 예시 (application.yml 설정)**
 
-```
+```js
 spring:
   session:
     store-type: jdbc  # JDBC 기반 세션 저장소 사용
@@ -46,7 +48,7 @@ spring:
 
 세션을 관리하는 서비스에서 HTTP 세션을 **DB에 저장**하여 여러 인스턴스에서 세션을 공유할 때 사용합니다.
 
-```
+```java
 @Controller
 public class SessionController {
     @GetMapping("/session")
@@ -77,7 +79,7 @@ public class SessionController {
 
 **✅ 사용 예시 (Repository 패턴)**
 
-```
+```python
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
     List<User> findByUsername(String username);
@@ -88,7 +90,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
 JPA 대신 JDBC 기반의 **간단한 CRUD 처리를 할 때** 유용합니다.
 
-```
+```rust
 @Service
 public class UserService {
     private final JdbcTemplate jdbcTemplate;
@@ -126,7 +128,7 @@ public class UserService {
 
 **✅ 사용 예시 (JdbcTemplate 활용)**
 
-```
+```c++
 @Autowired
 private JdbcTemplate jdbcTemplate;
 
@@ -172,3 +174,5 @@ public void insertUser(String username) {
 • spring-session-jdbc는 **세션 데이터를 DB에 저장하여 관리**하는 데 사용됩니다.
 
 이제 프로젝트의 목적에 맞게 적절한 라이브러리를 선택하시면 됩니다! 😊
+
+## Test h2 header

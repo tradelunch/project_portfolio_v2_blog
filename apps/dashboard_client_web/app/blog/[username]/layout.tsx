@@ -26,45 +26,11 @@ export const DashboardLayout = ({
             <AppSidebar side="left" />
 
             <SidebarInset>
-                {/* <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-                    <SidebarTrigger
-                        className={clsx(
-                            'fixed sm:hidden right-10 bottom-20 bg-zinc-700 z-20 '
-                        )}
-                    />
-
-                    <SidebarTrigger
-                        className={clsx(
-                            '-ml-1 hidden sm:inline-flex sm:relative bg-transparent z-20'
-                        )}
-                    />
-
-                    <Separator
-                        orientation="vertical"
-                        className="mr-2 data-[orientation=vertical]:h-4"
-                    />
-
-                    <Breadcrumb>
-                        <BreadcrumbList>
-                            <BreadcrumbItem className="hidden md:block">
-                                <BreadcrumbLink href="#">
-                                    Building Your Application
-                                </BreadcrumbLink>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator className="hidden md:block" />
-
-                            <BreadcrumbItem>
-                                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                            </BreadcrumbItem>
-                        </BreadcrumbList>
-                    </Breadcrumb>
-                </header> */}
-
                 <SiteHeader />
 
-                <main className="flex flex-1 flex-col gap-4 p-4">
+                <section className="flex flex-1 flex-col gap-4 py-4">
                     {children}
-                </main>
+                </section>
             </SidebarInset>
         </SidebarProvider>
     );

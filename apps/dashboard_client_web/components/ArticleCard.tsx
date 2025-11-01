@@ -23,6 +23,7 @@ export function ArticleCard({ id, title, excerpt, image }: ArticleCardProps) {
                 alt={title}
                 className="w-20 h-20 object-cover rounded-xl flex-shrink-0 border border-zinc-800"
             />
+
             <div className="flex-1 min-w-0">
                 <h2 className="text-base md:text-lg font-bold mb-1 truncate">
                     {title}
@@ -37,6 +38,7 @@ export function ArticleCard({ id, title, excerpt, image }: ArticleCardProps) {
                     >
                         Read more
                     </a>
+
                     <button className="text-xs text-zinc-500 hover:text-zinc-300 transition">
                         Share
                     </button>

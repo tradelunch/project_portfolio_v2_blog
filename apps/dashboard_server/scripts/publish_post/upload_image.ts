@@ -1,5 +1,4 @@
 import { CustomSnowflake } from "@/lib/CustomSnowflake.module";
-import { TPostFileMeta } from "@/lib/file.type";
 import { AWS_S3_BUCKET } from "@/src/env.schema";
 import { s3 } from "@/src/lib/awsS3";
 import { GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
@@ -9,21 +8,24 @@ import path from "path";
 import fs from "fs/promises";
 import mime from "mime-types";
 
+import { type TPostFileMeta } from "@/scripts/publish_post/post.type";
+
 export const DEFAULT_USER_ID = 1;
 
 export const load_local_file = async (
 	base: string,
 	folderPath: string,
 	slug: string,
-	ext: string
+	fileExt: string
 ) => {
 	const fullPath = path.resolve(
 		process.cwd(),
 		base,
 		folderPath,
 		slug,
-		`${slug}.${ext}`
+		`${slug}.${fileExt}`
 	);
+
 	try {
 		// 파일 정보 가져오기
 		const stat = await fs.stat(fullPath);
@@ -32,7 +34,7 @@ export const load_local_file = async (
 		const buffer = await fs.readFile(fullPath);
 
 		// content type 추론
-		const contentType = mime.lookup(ext) || "application/octet-stream";
+		const contentType = mime.lookup(fileExt) || "application/octet-stream";
 
 		return { buffer, contentType, fullPath, fileSize: stat.size };
 	} catch (err) {
@@ -53,6 +55,7 @@ export const get_signed_uri_s3 = async (key: string) => {
 
 	return signedUrl;
 };
+
 export const upload_file_s3 = async (meta: TPostFileMeta) => {
 	const fileBuffer = meta.buffer;
 
@@ -79,7 +82,7 @@ export const upload_file_s3 = async (meta: TPostFileMeta) => {
 	console.log("S3 Signed URL:", s3SignedUrl);
 
 	meta.storedName = `${meta.id}.${meta.ext}`;
-	meta.storedUri = s3SignedUrl;
+	meta.storedUri = key;
 	// meta.storedUri = `s3://${AWS_S3_BUCKET}/${key}`;
 
 	return meta;

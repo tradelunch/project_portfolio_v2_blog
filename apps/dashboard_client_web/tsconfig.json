@@ -8,6 +8,7 @@
         ],
         "baseUrl": ".",
         "rootDir": ".",
+        "allowJs": true,
         "paths": {
             "@": ["."],
             "@/*": ["./*"],

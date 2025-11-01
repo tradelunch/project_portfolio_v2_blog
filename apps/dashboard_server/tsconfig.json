@@ -7,11 +7,13 @@
 		"paths": {
 			"@": ["."],
 			"@/*": ["./*"]
-		}
+		},
+		"typeRoots": ["./node_modules/@types", "./types"]
 	},
 	"include": [
 		"src/**/*",
 		"types/**/*",
+		"types/global.d.ts",
 		"**/*.d.ts",
 		"**/lib/*",
 		"modules",
