@@ -1,5 +1,5 @@
 import { QueryTypes, Sequelize, Transaction } from "sequelize";
-import { type TPostFileMeta } from "@/scripts/publish_post/post.type";
+import { type TPostFileMeta } from "@/types/post.type";
 
 /**
  * 

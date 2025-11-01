@@ -13,7 +13,7 @@ import { establishDBConnection } from "@/src/db";
 import { CDN_ASSET_POSTS } from "@/src/env.schema";
 import { QueryTypes, Sequelize, Transaction } from "sequelize";
 
-import { type TPostFileMeta } from "@/scripts/publish_post/post.type";
+import { type TPostFileMeta } from "@/types/post.type";
 
 const run = async () => {
 	const base = "data";

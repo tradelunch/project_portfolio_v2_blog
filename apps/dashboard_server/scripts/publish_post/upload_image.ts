@@ -8,7 +8,7 @@ import path from "path";
 import fs from "fs/promises";
 import mime from "mime-types";
 
-import { type TPostFileMeta } from "@/scripts/publish_post/post.type";
+import { type TPostFileMeta } from "@/types/post.type";
 
 export const DEFAULT_USER_ID = 1;
 
