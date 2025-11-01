@@ -1,39 +1,39 @@
 {
-	"name": "@repo/markdown-parsing",
-	"license": "MIT",
-	"version": "0.1.0",
-	"type": "module",
-	"main": "dist/index.cjs.js",
-	"module": "dist/index.esm.js",
-	"types": "dist/index.d.ts",
-	"files": [
-		"dist"
-	],
-	"exports": {
-		".": {
-			"require": "./dist/index.cjs.js",
-			"import": "./dist/index.esm.js",
-			"types": "./dist/index.d.ts"
-		}
-	},
-	"scripts": {
-		"clean": "rm -rf dist",
-		"build": "yarn run clean && rollup -c",
-		"dev": "yarn run clean && rollup -c -w",
-		"lint": "eslint . --ext .ts",
-		"prepublishOnly": "yarn run build",
-		"test": "jest",
-		"test:watch": "jest --watch",
-		"test:coverage": "jest --coverage"
-	},
-	"peerDependencies": {},
-	"devDependencies": {
-		"@rollup/plugin-commonjs": "^29.0.0",
-		"@rollup/plugin-json": "^6.1.0",
-		"@rollup/plugin-node-resolve": "^16.0.3",
-		"@rollup/plugin-typescript": "^12.3.0",
-		"rollup": "^4.52.5",
-		"rollup-plugin-peer-deps-external": "^2.2.4",
-		"tslib": "^2.8.1"
-	}
+    "name": "@repo/markdown-parsing",
+    "license": "MIT",
+    "version": "0.1.0",
+    "type": "module",
+    "main": "dist/index.cjs.js",
+    "module": "dist/index.esm.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "exports": {
+        ".": {
+            "require": "./dist/index.cjs.js",
+            "import": "./dist/index.esm.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "scripts": {
+        "clean": "rm -rf dist",
+        "build": "yarn run clean && rollup -c",
+        "dev": "yarn run clean && rollup -c -w",
+        "lint": "eslint . --ext .ts",
+        "prepublishOnly": "yarn run build",
+        "test": "jest",
+        "test:watch": "jest --watch",
+        "test:coverage": "jest --coverage"
+    },
+    "peerDependencies": {},
+    "devDependencies": {
+        "@rollup/plugin-commonjs": "^29.0.0",
+        "@rollup/plugin-json": "^6.1.0",
+        "@rollup/plugin-node-resolve": "^16.0.3",
+        "@rollup/plugin-typescript": "^12.3.0",
+        "rollup": "^4.52.5",
+        "rollup-plugin-peer-deps-external": "^2.2.4",
+        "tslib": "^2.8.1"
+    }
 }

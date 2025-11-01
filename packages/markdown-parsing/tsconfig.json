@@ -16,6 +16,11 @@
 		"skipLibCheck": true,
 		"typeRoots": ["types", "node_modules/@types"]
 	},
-	"include": ["src/**/*.{ts,tsx,d.ts}", "test/**/*.{ts,tsx,d.ts}", "src"],
+	"include": [
+		"types/**/*.d.ts",
+		"src/**/*.{ts,tsx,d.ts}",
+		"test/**/*.{ts,tsx,d.ts}",
+		"src"
+	],
 	"exclude": ["node_modules", "__backup__", "dist"]
 }
