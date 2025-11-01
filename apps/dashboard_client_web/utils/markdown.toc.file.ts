@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { readFile } from 'fs/promises';
 
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
@@ -9,16 +9,23 @@ import rehypeStringify from 'rehype-stringify';
 import { tocPlugin } from '@/utils/markdown.toc';
 
 /**
- *
- * @description Processes a Markdown file to generate HTML and a table of contents.
- * @param filePath The path to the Markdown file to be processed.
- * @returns A Promise that resolves to an object containing the generated HTML and the table of contents.
+ * @description Loads the content of a markdown file.
+ * @param filePath The path to the Markdown file.
+ * @returns A Promise that resolves to the file content as a string.
  */
-export const processMarkdownFile = async (
-    filePath: string
-): Promise<TProcessedMarkdown> => {
-    const content = await readFileSync(filePath, 'utf8');
+export const loadMarkdownFile = async (filePath: string): Promise<string> => {
+    const content = await readFile(filePath, 'utf8');
+    return content;
+};
 
+/**
+ * @description Parses markdown content into HTML and a table of contents.
+ * @param content The markdown content string.
+ * @returns A Promise that resolves to an object containing the HTML and TOC.
+ */
+export const parseMarkdownContent = async (
+    content: string
+): Promise<TProcessedMarkdown> => {
     const processor = unified()
         .use(remarkParse)
         .use(remarkGfm)
@@ -36,4 +43,5 @@ export const processMarkdownFile = async (
 };
 
 // 사용
-// const { html, toc } = await processMarkdownFile('article.md');
+// const content = await loadMarkdownFile('article.md');
+// const { html, toc } = await parseMarkdownContent(content);

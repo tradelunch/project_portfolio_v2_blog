@@ -21,9 +21,6 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import 'katex/dist/katex.min.css';
 
-import { TableOfContents } from 'lucide-react';
-import { MarkdownProcessor } from '@/utils/markdown.toc';
-import { markdownToReact } from '@/utils';
 import clsx from 'clsx';
 
 const remarkPlugins = [

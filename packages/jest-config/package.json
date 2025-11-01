@@ -6,6 +6,5 @@
 	"exports": {
 		"./base": "./base.js"
 	},
-	"devDependencies": {
-	}
+	"devDependencies": {}
 }

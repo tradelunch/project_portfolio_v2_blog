@@ -33,6 +33,7 @@ export default async function Page({ params }: any) {
         const response = await axios.get(
             `/v1/api/posts/user/${'darkowlrising'}`
         );
+
         posts = response.data;
     } catch (e: any) {
         console.error('Failed to fetch posts:', e);
