@@ -22,6 +22,7 @@ export const BlogUserLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <SidebarProvider>
             <AppSidebar side="left" />
+
             <SidebarInset>
                 <SiteHeader />
 

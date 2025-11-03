@@ -262,3 +262,159 @@ router.get('/slug/:slug', async (req, res) => {
         });
     }
 });
+
+// routes/posts.routes.ts
+/**
+ * @api {get} /posts/users/:username/categories Get user's post categories as tree
+ * @apiName GetUserCategories
+ * @apiGroup Posts
+ *
+ * @apiParam {String} username The username of the author.
+ *
+ * @apiSuccess {Boolean} success Indicates if the request was successful.
+ * @apiSuccess {Object[]} categories Hierarchical category tree with post counts.
+ */
+router.get(
+    '/users/:username/categories',
+    async (req: Request<{ username: string }, {}, {}, {}>, res) => {
+        try {
+            const { username } = req.params;
+
+            // Get all categories for the user's posts
+            const categoriesQuery = `
+                WITH user_posts AS (
+                    SELECT DISTINCT p.id, p.category_id
+                    FROM posts p
+                    INNER JOIN users u ON p.user_id = u.id
+                    WHERE u.username = :username
+                        AND p.deleted_at IS NULL
+                        AND u.deleted_at IS NULL
+                        AND p.status = 'public'
+                ),
+                category_counts AS (
+                    SELECT 
+                        c.id,
+                        c.name,
+                        c.parent_id,
+                        c.root_id,
+                        c.level,
+                        COUNT(up.id) as post_count
+                    FROM categories c
+                    LEFT JOIN user_posts up ON c.id = up.category_id
+                    WHERE c.deleted_at IS NULL
+                    GROUP BY c.id, c.name, c.parent_id, c.root_id, c.level
+                    HAVING COUNT(up.id) > 0
+                )
+                SELECT 
+                    id,
+                    name,
+                    parent_id,
+                    root_id,
+                    level,
+                    post_count
+                FROM category_counts
+                ORDER BY level ASC, name ASC
+            `;
+
+            const categories = await sequalizeP.query(categoriesQuery, {
+                replacements: { username },
+                type: QueryTypes.SELECT,
+            });
+
+            res.json({
+                success: true,
+                data: {
+                    categories,
+                },
+            });
+        } catch (error) {
+            console.error('API Error fetching categories:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch categories',
+            });
+        }
+    }
+);
+
+// routes/posts.routes.ts
+/**
+ * @api {get} /posts/users/:username/category/:categoryId Get posts by category
+ * @apiName GetPostsByCategory
+ * @apiGroup Posts
+ */
+router.get(
+    '/users/:username/category/:categoryId',
+    async (
+        req: Request<
+            { username: string; categoryId: string },
+            {},
+            {},
+            { cursor?: string; limit?: string }
+        >,
+        res
+    ) => {
+        try {
+            const { username, categoryId } = req.params;
+            const cursor = parseInt(req.query.cursor || '0', 10);
+            const limit = Math.min(parseInt(req.query.limit || '10', 10), 50);
+            const fetchLimit = limit + 1;
+
+            const postsQuery = `
+                SELECT 
+                    p.id,
+                    p.user_id,
+                    p.slug,
+                    p.title,
+                    p.description,
+                    p.content,
+                    p.status,
+                    p.created_at,
+                    p.updated_at,
+                    p.category_id,
+                    f.stored_uri
+                FROM posts p
+                INNER JOIN users u ON p.user_id = u.id
+                LEFT JOIN files f ON p.id = f.post_id 
+                    AND f.is_thumbnail = true 
+                    AND f.deleted_at IS NULL
+                WHERE u.username = :username
+                    AND p.category_id = :categoryId
+                    AND p.deleted_at IS NULL
+                    AND u.deleted_at IS NULL
+                    AND p.status = 'public'
+                    ${cursor > 0 ? 'AND p.id < :cursor' : ''}
+                ORDER BY p.id DESC
+                LIMIT :fetchLimit
+            `;
+
+            const rows: any[] = await sequalizeP.query(postsQuery, {
+                replacements: {
+                    username,
+                    categoryId: parseInt(categoryId, 10),
+                    cursor: cursor || Number.MAX_SAFE_INTEGER,
+                    fetchLimit,
+                },
+                type: QueryTypes.SELECT,
+            });
+
+            const hasMore = rows.length > limit;
+            const posts = hasMore ? rows.slice(0, limit) : rows;
+            const nextCursor =
+                hasMore && posts.length > 0 ? posts[posts.length - 1].id : null;
+
+            res.json({
+                success: true,
+                posts,
+                nextCursor,
+                hasMore,
+            });
+        } catch (error) {
+            console.error('API Error fetching posts by category:', error);
+            res.status(500).json({
+                success: false,
+                message: 'Failed to fetch posts',
+            });
+        }
+    }
+);

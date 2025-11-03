@@ -39,6 +39,7 @@ import { TeamSwitcher } from '@/components/team-switcher';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { ModeToggle } from '@/components/mode-toggle';
+import { CategorySidebar } from '@/components/blog/CategorySidebar.server';
 
 // This is sample data.
 const data = {
@@ -138,6 +139,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <ModeToggle />
                 </div>
             </SidebarHeader>
+
+            <CategorySidebar username={username} />
 
             <SidebarContent>
                 <SidebarGroup>

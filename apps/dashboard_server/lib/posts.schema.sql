@@ -32,6 +32,8 @@ insert into users (username, email)
 VALUES ('darkowlrising', 'darkowlrising@gmail.com');
 insert into users (username, email)
 VALUES ('taeklim', 'tio.taek.lim@gmail.com');
+
+
 -- ===========================
 -- POSTS TABLE
 -- ===========================
@@ -54,6 +56,37 @@ CREATE TABLE IF NOT EXISTS posts (
     category_id     BIGINT NULL,
     PRIMARY KEY (id)
 );
+
+
+-- ===========================
+-- categories TABLE
+-- ===========================
+-- CREATE TABLE categories (
+--     id          BIGSERIAL PRIMARY KEY,
+--     name        VARCHAR(100) NOT NULL,
+--     parent_id   BIGINT REFERENCES categories(id) ON DELETE CASCADE,
+--     root_id     BIGINT NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
+--     level       INT NOT NULL DEFAULT 0,
+--     UNIQUE(name, parent_id)
+-- );
+
+drop table if exists categories;
+CREATE TABLE if not exists categories (
+    id              BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name        VARCHAR(100) NOT NULL UNIQUE,
+    parent_id   BIGINT NOT NULL,
+    root_id     BIGINT NOT NULL,
+    level       INT NOT NULL DEFAULT 0,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at      TIMESTAMP DEFAULT NULL
+);
+
+-- 인덱스
+CREATE INDEX if not exists idx_categories_parent_id ON categories(parent_id);
+CREATE INDEX if not exists idx_categories_root_id ON categories(root_id);
+CREATE INDEX if not exists idx_categories_level ON categories(level);
+
 
 -- ===========================
 -- FILES TABLE
@@ -113,36 +146,6 @@ CREATE INDEX if not exists idx_post_tags_post_id ON post_tags(post_id);
 
 
 -- ===========================
--- categories TABLE
--- ===========================
--- CREATE TABLE categories (
---     id          BIGSERIAL PRIMARY KEY,
---     name        VARCHAR(100) NOT NULL,
---     parent_id   BIGINT REFERENCES categories(id) ON DELETE CASCADE,
---     root_id     BIGINT NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
---     level       INT NOT NULL DEFAULT 0,
---     UNIQUE(name, parent_id)
--- );
-
-drop table if exists categories;
-CREATE TABLE if not exists categories (
-    id              BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name        VARCHAR(100) NOT NULL UNIQUE,
-    parent_id   BIGINT NOT NULL,
-    root_id     BIGINT NOT NULL,
-    level       INT NOT NULL DEFAULT 0,
-    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at      TIMESTAMP DEFAULT NULL
-);
-
--- 인덱스
-CREATE INDEX if not exists idx_categories_parent_id ON categories(parent_id);
-CREATE INDEX if not exists idx_categories_root_id ON categories(root_id);
-CREATE INDEX if not exists idx_categories_level ON categories(level);
-
-
--- ===========================
 -- post_categories TABLE
 -- ===========================
 -- CREATE TABLE post_categories (
@@ -179,3 +182,17 @@ INSERT INTO users (username, email)
 VALUES ('john', 'john@example.com')
 ON CONFLICT (email)
 DO NOTHING;
+
+
+-- 복합 인덱스 추가로 성능 극대화
+CREATE INDEX IF NOT EXISTS idx_posts_user_deleted_id 
+ON posts(user_id, deleted_at, id DESC) 
+WHERE deleted_at IS NULL;
+
+CREATE INDEX IF NOT EXISTS idx_posts_slug_created 
+ON posts(slug, created_at DESC, id DESC) 
+WHERE deleted_at IS NULL;
+
+CREATE INDEX IF NOT EXISTS idx_files_post_thumbnail 
+ON files(post_id, is_thumbnail) 
+WHERE deleted_at IS NULL AND is_thumbnail = true;
