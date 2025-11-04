@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS posts CASCADE;
 
 CREATE TABLE posts (
-    post_id          BIGINT GENERATED ALWAYS AS IDENTITY primary key,          -- 고유 PK
+    id          BIGINT GENERATED ALWAYS AS IDENTITY primary key,          -- 고유 PK
     group_id        BIGINT,                         -- 루트 글 ID (root면 자기 자신)
     group_order_id  INT DEFAULT 0,                  -- 그룹 내 순서
     level           INT DEFAULT 0,                  -- 깊이 (root = 0)
@@ -15,7 +15,7 @@ CREATE TABLE posts (
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at      TIMESTAMP DEFAULT NULL,    
-    FOREIGN KEY (parent_id) REFERENCES posts(post_id) on delete cascade
+    FOREIGN KEY (parent_id) REFERENCES posts(id) on delete cascade
 );
 
 
@@ -26,7 +26,7 @@ CREATE INDEX idx_posts_group_id ON posts(group_id);
 WITH RECURSIVE post_tree AS (
     -- 1️⃣ 루트 글 선택
     SELECT
-        seq_id,
+        id,
         group_id,
         group_order_id,
         level,
@@ -38,7 +38,7 @@ WITH RECURSIVE post_tree AS (
         created_at,
         updated_at,
         deleted_at,
-        LPAD(seq_id::text, 10, '0') AS path
+        LPAD(id::text, 10, '0') AS path
     FROM posts
     WHERE parent_id IS NULL
 
@@ -46,7 +46,7 @@ WITH RECURSIVE post_tree AS (
 
     -- 2️⃣ 댓글 선택
     SELECT
-        p.seq_id,
+        p.id,
         p.group_id,
         p.group_order_id,
         p.level,
@@ -64,7 +64,7 @@ WITH RECURSIVE post_tree AS (
 )
 SELECT
     ROW_NUMBER() OVER (ORDER BY path, priority ASC) AS row_num,
-    seq_id,
+    id,
     group_id,
     group_order_id,
     level,
