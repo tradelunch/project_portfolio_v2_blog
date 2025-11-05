@@ -8,13 +8,16 @@ export const insertPost = async (
 ) => {
     const results = (await db.query(
         `
-        INSERT INTO posts (id, user_id, title, content, status, created_at, updated_at, slug, category_id)
-        VALUES (:id, :userId, :title, :content, :status, NOW(), NOW(), :slug, :categoryId)
+        INSERT INTO 
+            posts (id, user_id, title, content, status, created_at, updated_at, slug, category_id, group_id)
+        VALUES 
+            (:id, :userId, :title, :content, :status, NOW(), NOW(), :slug, :categoryId, :groupId)
         RETURNING id
     `,
         {
             replacements: {
                 id: meta.id,
+                groupId: meta.id,
                 slug: meta.slug,
                 userId: meta.userId,
                 title: meta.title,

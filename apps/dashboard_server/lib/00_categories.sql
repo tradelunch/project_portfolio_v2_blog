@@ -9,11 +9,11 @@ CREATE TABLE categories (
     parent_id   BIGINT REFERENCES categories(id) ON DELETE CASCADE,
     -- --
     name                 VARCHAR(100) NOT NULL,
-    -- 
-    -- FOREIGN KEY (parent_id) REFERENCES posts(category_id)
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    deleted_at      TIMESTAMP DEFAULT NULL
+    deleted_at      TIMESTAMP DEFAULT NULL,
+    FOREIGN KEY (parent_id) REFERENCES categories(id),
+    unique(name)
 );
 
 -- 동일 부모 내 우선순위 + 조회 최적화용 인덱스

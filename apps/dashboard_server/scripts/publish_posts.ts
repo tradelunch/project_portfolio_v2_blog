@@ -84,8 +84,7 @@ const run = async () => {
         meta.content = updated || meta.content;
 
         // 1. insert categories
-        const categoryId = await insertCategories(db, meta, tx);
-        meta.categoryId = categoryId;
+        meta.categoryId = await insertCategories(db, meta, tx);
 
         // 2. insert post
         await insertPost(db, meta, tx);

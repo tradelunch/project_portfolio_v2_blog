@@ -61,7 +61,7 @@ export const insertCategories = async (
                 ON CONFLICT (name) DO UPDATE SET
                     level = EXCLUDED.level,
                     parent_id = EXCLUDED.parent_id,
-                    root_id = EXCLUDED.root_id,
+                    group_id = EXCLUDED.group_id,
                     updated_at = CURRENT_TIMESTAMP`,
             {
                 replacements: {
@@ -77,6 +77,6 @@ export const insertCategories = async (
 
         parentId = id;
     }
-    const currentCategoryId = parentId;
-    return currentCategoryId;
+
+    return parentId;
 };

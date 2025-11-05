@@ -1,3 +1,4 @@
+CREATE TYPE if not exists post_status_enum AS ENUM ('public', 'private', 'follower');
 DROP TABLE IF EXISTS posts CASCADE;
 
 CREATE TABLE posts (
@@ -10,9 +11,13 @@ CREATE TABLE posts (
     -- --
     priority        INT NOT NULL DEFAULT 100,
     -- reply_count     INT DEFAULT 0,                  -- 자식 글 수
+    slug            VARCHAR(255) NOT NULL,
     title           VARCHAR(255) NOT NULL,
     content         TEXT,
     category_id     BIGINT NULL,
+    user_id         BIGINT NOT NULL,
+    description     TEXT DEFAULT NULL,
+    status          post_status_enum NOT NULL DEFAULT 'public',    
     -- --
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
