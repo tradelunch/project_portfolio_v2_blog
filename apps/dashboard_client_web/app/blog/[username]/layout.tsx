@@ -1,4 +1,4 @@
-import { AppSidebar } from '@/components/app-sidebar';
+import { AppSidebar } from '@/components/blog/sidebar-blog.server';
 import { SiteHeader } from '@/components/site-header';
 import {
     Breadcrumb,

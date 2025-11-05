@@ -1,13 +1,16 @@
 // lib/tree.utils.ts
 import { TCategory } from '@/apis/getCategories.api';
+import { ETreeNodeType } from '@repo/markdown-parsing';
 
 export type TreeNode = {
     id: number;
     name: string;
+    slug: string;
     level: number;
     postCount: number;
     children: TreeNode[];
     href: string;
+    type: ETreeNodeType;
 };
 
 /**
@@ -20,29 +23,33 @@ export function buildCategoryTree(categories: TCategory[]): TreeNode[] {
     const categoryMap = new Map<number, TreeNode>();
 
     // Initialize all nodes
-    categories.forEach((cat) => {
-        categoryMap.set(cat.id, {
-            id: cat.id,
-            name: cat.name,
-            level: cat.level,
-            postCount: cat.post_count,
+    categories.forEach((c) => {
+        categoryMap.set(c.id, {
+            id: c.id,
+            name: c.title,
+            slug: c.slug,
+            level: c.level,
+            postCount: c.post_count,
             children: [],
-            href: `/category/${cat.id}`,
+            // TODO click category?
+            href: `/category/${c.title}`,
+            // type: c.type
+            type: c.type
         });
     });
 
     const rootNodes: TreeNode[] = [];
 
     // Build the tree
-    categories.forEach((cat) => {
-        const node = categoryMap.get(cat.id)!;
-
-        if (cat.parent_id === 0 || cat.parent_id === cat.id) {
+    categories.forEach((c) => {
+        const node = categoryMap.get(c.id)!;
+        if (!c.parent_id || c.parent_id === c.id) {
+            console.log('parent_id', c.parent_id);
             // Root node
             rootNodes.push(node);
         } else {
             // Child node
-            const parent = categoryMap.get(cat.parent_id);
+            const parent = categoryMap.get(c.parent_id);
             if (parent) {
                 parent.children.push(node);
             } else {

@@ -21,7 +21,8 @@
         // "types/**/*.{ts,tsx,d.ts}",
         "src/**/*/*.{ts,tsx,d.ts}",
         // "test/**/*.{ts,tsx,d.ts}",
-        "src"
+        "src",
+        "src/types/**/*.ts"
         // "types"
     ],
     "exclude": ["node_modules", "__backup__", "dist", "**/*.spec.ts"]

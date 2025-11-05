@@ -1,4 +1,10 @@
 import { sequalizeP } from '@/src/db';
+import {
+    ETreeNodeType,
+    TCategoryTreeResponse,
+    TTreeNode,
+} from '@repo/markdown-parsing';
+
 import { Router, Request } from 'express';
 import { QueryTypes } from 'sequelize';
 
@@ -274,68 +280,152 @@ router.get('/slug/:slug', async (req, res) => {
  * @apiSuccess {Boolean} success Indicates if the request was successful.
  * @apiSuccess {Object[]} categories Hierarchical category tree with post counts.
  */
-router.get(
-    '/users/:username/categories',
-    async (req: Request<{ username: string }, {}, {}, {}>, res) => {
-        try {
-            const { username } = req.params;
+router.get('/users/:username/categories', async (req, res) => {
+    try {
+        const { username } = req.params;
 
-            // Get all categories for the user's posts
-            const categoriesQuery = `
-                WITH user_posts AS (
-                    SELECT DISTINCT p.id, p.category_id
-                    FROM posts p
-                    INNER JOIN users u ON p.user_id = u.id
-                    WHERE u.username = :username
-                        AND p.deleted_at IS NULL
-                        AND u.deleted_at IS NULL
-                        AND p.status = 'public'
-                ),
-                category_counts AS (
+        const treeQuery = `
+                WITH RECURSIVE category_tree AS (
+                    -- 루트 카테고리
                     SELECT 
                         c.id,
-                        c.name,
                         c.parent_id,
-                        c.root_id,
+                        c.group_id,
                         c.level,
-                        COUNT(up.id) as post_count
+                        c.priority,
+                        c.title,
+                        LPAD(c.seq::text, 6, '0') AS path
                     FROM categories c
-                    LEFT JOIN user_posts up ON c.id = up.category_id
+                    JOIN users u ON c.user_id = u.id
+                    WHERE c.parent_id IS NULL
+                        AND c.deleted_at IS NULL
+                        AND u.username = :username
+                        AND u.deleted_at IS NULL
+
+                    UNION ALL
+
+                    -- 자식 카테고리
+                    SELECT 
+                        c.id,
+                        c.parent_id,
+                        c.group_id,
+                        c.level,
+                        c.priority,
+                        c.title,
+                        ct.path || '.' || LPAD(c.seq::text, 6, '0') AS path
+                    FROM categories c
+                    JOIN category_tree ct ON c.parent_id = ct.id
+                    JOIN users u ON c.user_id = u.id
                     WHERE c.deleted_at IS NULL
-                    GROUP BY c.id, c.name, c.parent_id, c.root_id, c.level
-                    HAVING COUNT(up.id) > 0
-                )
-                SELECT 
-                    id,
-                    name,
-                    parent_id,
-                    root_id,
-                    level,
-                    post_count
-                FROM category_counts
-                ORDER BY level ASC, name ASC
+                        AND u.username = :username
+                        AND u.deleted_at IS NULL
+                    ),
+
+                    user_posts AS (
+                    -- 지정된 사용자의 게시글만 선택
+                    SELECT 
+                        p.id,
+                        p.seq,
+                        p.slug,
+                        p.title,
+                        p.content,
+                        p.description,
+                        p.category_id,
+                        p.priority,
+                        p.created_at,
+                        p.updated_at,
+                        u.username
+                    FROM posts p
+                    JOIN users u ON u.id = p.user_id
+                    WHERE u.username = :username
+                        AND u.deleted_at IS NULL
+                        AND p.deleted_at IS NULL
+                        AND p.status = 'public'
+                    ),
+
+                    combined_tree_post AS (
+                    -- 카테고리 노드
+                    SELECT 
+                        '${ETreeNodeType.CATEGORY}' AS type,
+                        ct.id,
+                        ct.parent_id,
+                        ct.group_id,
+                        ct.level,
+                        ct.priority,
+                        ct.title,
+                        NULL::BIGINT AS post_id,
+                        NULL AS slug,
+                        NULL AS content,
+                        NULL AS description,
+                        NULL::TIMESTAMP AS created_at,
+                        NULL::TIMESTAMP AS updated_at,
+                        NULL::VARCHAR AS username,
+                        ct.path
+                    FROM category_tree ct
+
+                    UNION ALL
+
+                    -- 게시글 노드 (카테고리 group_id 상속)
+                    SELECT 
+                        '${ETreeNodeType.POST}' AS type,
+                        p.id,
+                        p.category_id AS parent_id,
+                        ct.group_id AS group_id,
+                        ct.level + 1 AS level,
+                        p.priority,
+                        p.title,
+                        p.id AS post_id,
+                        p.slug,
+                        p.content,
+                        p.description,
+                        p.created_at,
+                        p.updated_at,
+                        p.username,
+                        ct.path || '.' || LPAD(p.seq::text, 6, '0') AS path
+                    FROM user_posts p
+                    JOIN category_tree ct ON p.category_id = ct.id
+                    )
+
+                    SELECT 
+                        type,
+                        id,
+                        parent_id,
+                        group_id,
+                        level,
+                        priority,
+                        title,
+                        post_id,
+                        slug,
+                        --content,
+                        description,
+                        created_at,
+                        updated_at,
+                        username,
+                        path,
+                        ROW_NUMBER() OVER (ORDER BY path) AS sort_key
+                    FROM combined_tree_post
+                    ORDER BY path;
             `;
 
-            const categories = await sequalizeP.query(categoriesQuery, {
-                replacements: { username },
-                type: QueryTypes.SELECT,
-            });
+        const categories = await sequalizeP.query<TTreeNode>(treeQuery, {
+            replacements: { username },
+            type: QueryTypes.SELECT,
+        });
 
-            res.json({
-                success: true,
-                data: {
-                    categories,
-                },
-            });
-        } catch (error) {
-            console.error('API Error fetching categories:', error);
-            res.status(500).json({
-                success: false,
-                message: 'Failed to fetch categories',
-            });
-        }
+        const response: TCategoryTreeResponse = {
+            success: true,
+            data: { categories },
+        };
+
+        res.json(response);
+    } catch (error) {
+        console.error('API Error fetching categories:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch categories',
+        });
     }
-);
+});
 
 // routes/posts.routes.ts
 /**

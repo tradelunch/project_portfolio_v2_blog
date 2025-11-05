@@ -80,3 +80,95 @@ SELECT
     deleted_at
 FROM post_tree
 ORDER BY path, priority ASC;
+
+
+-- select posts with categories
+WITH RECURSIVE category_tree AS (
+  -- 루트 카테고리
+  SELECT 
+    id,
+    parent_id,
+    group_id,
+    level,
+    priority,
+    name,
+    LPAD(id::text, 6, '0') AS path
+  FROM categories
+  WHERE parent_id IS NULL
+    AND deleted_at IS NULL
+
+  UNION ALL
+
+  -- 자식 카테고리
+  SELECT 
+    c.id,
+    c.parent_id,
+    c.group_id,
+    c.level,
+    c.priority,
+    c.name,
+    ct.path || '.' || LPAD(c.id::text, 6, '0') AS path
+  FROM categories c
+  JOIN category_tree ct ON c.parent_id = ct.id
+  WHERE c.deleted_at IS NULL
+),
+
+combined_tree AS (
+  -- 카테고리 노드
+  SELECT 
+    'CATEGORY' AS node_type,
+    ct.id,
+    ct.parent_id,
+    ct.group_id,
+    ct.level,
+    ct.priority,
+    ct.name AS title,
+    NULL::BIGINT AS post_id,
+    NULL AS slug,
+    NULL AS content,
+    NULL AS description,
+    NULL::TIMESTAMP AS created_at,
+    NULL::TIMESTAMP AS updated_at,
+    ct.path
+  FROM category_tree ct
+
+  UNION ALL
+
+  -- 게시글 노드 (카테고리의 group_id 상속)
+  SELECT 
+    'POST' AS node_type,
+    p.id,
+    p.category_id AS parent_id,
+    ct.group_id AS group_id,          -- 카테고리의 group_id 상속
+    ct.level + 1 AS level,
+    p.priority,
+    p.title,
+    p.id AS post_id,
+    p.slug,
+    p.content,
+    p.description,
+    p.created_at,
+    p.updated_at,
+    ct.path || '.' || LPAD(p.id::text, 6, '0') AS path
+  FROM posts p
+  JOIN category_tree ct ON p.category_id = ct.id
+  WHERE p.deleted_at IS NULL
+)
+
+SELECT 
+  node_type,
+  id,
+  parent_id,
+  group_id,
+  level,
+  priority,
+  title,
+  post_id,
+  slug,
+  content,
+  description,
+  created_at,
+  updated_at,
+  ROW_NUMBER() OVER (ORDER BY path) AS sort_key
+FROM combined_tree
+ORDER BY path;

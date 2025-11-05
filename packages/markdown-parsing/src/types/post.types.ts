@@ -20,7 +20,7 @@ export type TPostFileMeta = {
 
     id?: string;
     ext?: string;
-    userId?: number;
+    userId?: string;
     postId?: string;
     contentType?: string;
     fileSize?: number;

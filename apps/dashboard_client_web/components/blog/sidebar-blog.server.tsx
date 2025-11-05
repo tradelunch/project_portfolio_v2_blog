@@ -39,7 +39,8 @@ import { TeamSwitcher } from '@/components/team-switcher';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { ModeToggle } from '@/components/mode-toggle';
-import { CategorySidebar } from '@/components/blog/CategorySidebar.server';
+import { CategoriesGroup } from '@/components/blog/sidebar-categories.server';
+import Loading from '@/app/blog/[username]/loading';
 
 // This is sample data.
 const data = {
@@ -140,8 +141,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </div>
             </SidebarHeader>
 
-            <CategorySidebar username={username} />
-
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel>DASHBOARD</SidebarGroupLabel>
@@ -168,7 +167,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     </SidebarGroupContent>
                 </SidebarGroup>
 
-                <SidebarGroup>
+                <React.Suspense fallback={<Loading />}>
+                    <CategoriesGroup username={username} />
+                </React.Suspense>
+
+                {/* <SidebarGroup>
                     <SidebarGroupLabel>Files</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
@@ -180,7 +183,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
-                </SidebarGroup>
+                </SidebarGroup> */}
             </SidebarContent>
 
             <SidebarRail />
@@ -217,6 +220,7 @@ function Tree({ item }: { item: string | any[] }) {
                         {name}
                     </SidebarMenuButton>
                 </CollapsibleTrigger>
+
                 <CollapsibleContent>
                     <SidebarMenuSub>
                         {items.map((subItem, index) => (

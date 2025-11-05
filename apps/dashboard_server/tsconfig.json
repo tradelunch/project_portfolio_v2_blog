@@ -11,13 +11,42 @@
         "typeRoots": ["node_modules/@types", "types"]
     },
     "include": [
+        "utils/**/*",
         "src/**/*",
         "types/**/*",
         "types/global.d.ts",
         "**/*.d.ts",
         "**/lib/*",
-        "modules",
         "scripts"
     ],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules", "dist", "coverage"]
 }
+
+// {
+//     "extends": "@repo/typescript-config/node-library.json",
+//     "compilerOptions": {
+//         // "target": "ES2020",
+//         // "module": "commonjs",
+//         // "lib": ["ES2020"],
+//         // "strict": true,
+//         // "esModuleInterop": true,
+//         // "skipLibCheck": true,
+//         // "forceConsistentCasingInFileNames": true,
+//         // "resolveJsonModule": true,
+//         // "moduleResolution": "node",
+
+//         "outDir": "dist",
+//         "rootDir": ".",
+//         "baseUrl": ".",
+//         "typeRoots": ["node_modules/@types", "types"],
+//         "paths": {
+//             "@/*": ["src/*"],
+//             "@types/*": ["types/*"],
+//             "@utils/*": ["utils/*"],
+//             "@routes/*": ["routes/*"],
+//             "@config/*": ["config/*"]
+//         }
+//     },
+//     "include": ["**/*.ts"],
+//     "exclude": ["node_modules", "dist", "coverage"]
+// }

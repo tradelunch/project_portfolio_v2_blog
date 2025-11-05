@@ -18,15 +18,22 @@
             "@/types/*": ["./types/*"],
             "@/lib/*": ["./lib/*"],
             "@/utils/*": ["./utils/*"]
-        }
+        },
+        "typeRoots": ["node_modules/@types", "types"]
     },
     "include": [
         "**/*.ts",
         "**/*.tsx",
         "next-env.d.ts",
         ".next/types/**/*.ts",
-        "**/types/*.ts"
+        "**/types/*.ts",
+
+        "types/**/*",
+        "utils/**/*",
+        "**/*.d.ts",
+        "**/lib/*",
+        "lib/**/*"
     ],
 
-    "exclude": ["node_modules", "__backup__"]
+    "exclude": ["node_modules", "__backup__", "dist", "coverage", ""]
 }

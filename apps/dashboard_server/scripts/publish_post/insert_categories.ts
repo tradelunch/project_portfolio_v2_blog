@@ -8,7 +8,7 @@ import { CustomSnowflake } from '@repo/markdown-parsing';
  * table
 CREATE TABLE if not exists categories (
     id              BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name        VARCHAR(100) NOT NULL UNIQUE,
+    title        VARCHAR(100) NOT NULL UNIQUE,
     parent_id   BIGINT NOT NULL,
     root_id     BIGINT NOT NULL,
     level       INT NOT NULL DEFAULT 0,
@@ -38,12 +38,15 @@ export const insertCategories = async (
     const rootId = CustomSnowflake.generate();
     await db.query(
         `
-        INSERT INTO categories (id, group_id, name) 
-        VALUES (:id, :id, :name) 
-        ON CONFLICT (name) DO UPDATE SET
+        INSERT INTO categories (id, group_id, title, user_id) 
+        VALUES (:id, :id, :title, :userId) 
+        ON CONFLICT (title) DO UPDATE SET
             level = EXCLUDED.level,
             updated_at = CURRENT_TIMESTAMP`,
-        { replacements: { id: rootId, name: root }, transaction: tx }
+        {
+            replacements: { id: rootId, title: root, userId: meta.userId },
+            transaction: tx,
+        }
     );
 
     let parentId = rootId;
@@ -56,12 +59,13 @@ export const insertCategories = async (
         const id = CustomSnowflake.generate();
         await db.query(
             `
-            INSERT INTO categories (id, group_id, parent_id, level, name) 
-                VALUES (:id, :groupId, :parentId, :level, :name) 
-                ON CONFLICT (name) DO UPDATE SET
+            INSERT INTO categories (id, group_id, parent_id, level, title, user_id) 
+                VALUES (:id, :groupId, :parentId, :level, :title, :userId) 
+                ON CONFLICT (title) DO UPDATE SET
                     level = EXCLUDED.level,
                     parent_id = EXCLUDED.parent_id,
                     group_id = EXCLUDED.group_id,
+                    user_id = EXCLUDED.user_id,
                     updated_at = CURRENT_TIMESTAMP`,
             {
                 replacements: {
@@ -69,7 +73,8 @@ export const insertCategories = async (
                     groupId: rootId,
                     level,
                     parentId,
-                    name: childName,
+                    title: childName,
+                    userId: meta.userId,
                 },
                 transaction: tx,
             }

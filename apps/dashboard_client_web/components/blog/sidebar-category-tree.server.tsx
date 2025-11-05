@@ -2,6 +2,7 @@
 'use client';
 
 import { ChevronRight, Folder, File } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
     Collapsible,
@@ -23,16 +24,23 @@ type CategoryTreeProps = {
 
 export function CategoryTree({ node, username }: CategoryTreeProps) {
     const hasChildren = node.children.length > 0;
+    const pathname = usePathname();
+    const pathSegments = pathname.split('/'); // TODO no slug?
+    const currentSlug = pathSegments[pathSegments.length - 1];
 
     if (!hasChildren) {
         return (
             <SidebarMenuItem>
-                <Link href={`/blog/@${username}/category/${node.id}`}>
-                    <SidebarMenuButton>
+                <Link href={`/blog/@${username}/${node.slug}`}>
+                    <SidebarMenuButton
+                        isActive={node.slug === currentSlug}
+                        className="data-[active=true]:bg-transparent"
+                    >
                         <File />
                         <span>{node.name}</span>
                     </SidebarMenuButton>
                 </Link>
+
                 {node.postCount > 0 && (
                     <SidebarMenuBadge>{node.postCount}</SidebarMenuBadge>
                 )}
@@ -44,7 +52,9 @@ export function CategoryTree({ node, username }: CategoryTreeProps) {
         <SidebarMenuItem>
             <Collapsible
                 className="group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90"
-                defaultOpen={node.level === 0}
+                // TODO: open logic
+                // defaultOpen={node.level === 0}
+                defaultOpen={true}
             >
                 <CollapsibleTrigger asChild>
                     <SidebarMenuButton>
@@ -53,9 +63,11 @@ export function CategoryTree({ node, username }: CategoryTreeProps) {
                         <span>{node.name}</span>
                     </SidebarMenuButton>
                 </CollapsibleTrigger>
+
                 {node.postCount > 0 && (
                     <SidebarMenuBadge>{node.postCount}</SidebarMenuBadge>
                 )}
+
                 <CollapsibleContent>
                     <SidebarMenuSub>
                         {node.children.map((child) => (

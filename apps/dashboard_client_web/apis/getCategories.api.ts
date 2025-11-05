@@ -1,13 +1,16 @@
 // apis/getCategories.api.ts
 import { axios_instance } from '@repo/axios';
+import { ETreeNodeType } from '@repo/markdown-parsing';
 
 export type TCategory = {
     id: number;
-    name: string;
+    title: string;
+    slug: string;
     parent_id: number;
     root_id: number;
     level: number;
     post_count: number;
+    type: ETreeNodeType;
 };
 
 export type TCategoriesResponse = {
@@ -19,13 +22,13 @@ export async function getCategoriesByUsername(
     username: string
 ): Promise<TCategoriesResponse> {
     try {
-        const response = await axios_instance.get<TCategoriesResponse>(
+        const res = await axios_instance.get<TCategoriesResponse>(
             `/v1/api/posts/users/${username}/categories`
         );
 
-        console.log('categoriesL ', response.data);
+        console.log('categoriesL ', res.data);
 
-        return response.data;
+        return res.data;
     } catch (error) {
         console.error('Failed to fetch categories:', error);
         throw new Error('Failed to fetch categories');

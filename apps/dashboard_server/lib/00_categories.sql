@@ -8,12 +8,13 @@ CREATE TABLE categories (
     priority             INT NOT NULL DEFAULT 100,
     parent_id   BIGINT REFERENCES categories(id) ON DELETE CASCADE,
     -- --
-    name                 VARCHAR(100) NOT NULL,
+    user_id         BIGINT NOT NULL,
+    title                 VARCHAR(100) NOT NULL,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted_at      TIMESTAMP DEFAULT NULL,
     FOREIGN KEY (parent_id) REFERENCES categories(id),
-    unique(name)
+    unique(title)
 );
 
 -- 동일 부모 내 우선순위 + 조회 최적화용 인덱스
@@ -30,7 +31,7 @@ WITH RECURSIVE category_tree AS (
     group_id,
     level,
     priority,
-    name,
+    title,
     LPAD(id::text, 6, '0') AS path
   FROM categories
   WHERE parent_id IS NULL
@@ -44,7 +45,7 @@ WITH RECURSIVE category_tree AS (
     c.group_id,
     c.level,
     c.priority,
-    c.name,
+    c.title,
     ct.path || '.' || LPAD(c.id::text, 6, '0') AS path
   FROM categories c
   JOIN category_tree ct ON c.parent_id = ct.id
@@ -55,7 +56,7 @@ SELECT
   group_id,
   level,
   priority,
-  name,
-  ROW_NUMBER() OVER (ORDER BY path) AS order_in_tree
+  title,
+  ROW_NUMBER() OVER (ORDER BY path) AS sort_key
 FROM category_tree
 ORDER BY split_part(path, '.', level + 1)::int, priority ASC;

@@ -41,7 +41,6 @@ const run = async () => {
             folderPath,
             slug,
             filename: `${slug}.${fileExt}`,
-            userId: 4,
 
             // post meta
             title: extractedMDFile.title,
@@ -51,6 +50,8 @@ const run = async () => {
             content: extractedMDFile.content,
             categories: folderPath.split('/'),
         };
+        // TODO: Hard Coding userId
+        meta.userId = '4';
 
         // 2. load local file
         const { buffer, contentType, fullPath, fileSize } =
