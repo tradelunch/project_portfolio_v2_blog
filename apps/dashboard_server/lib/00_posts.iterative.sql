@@ -23,14 +23,13 @@ CREATE TABLE posts (
 -- group_id 기준 조회 최적화
 CREATE INDEX idx_posts_group_id ON posts(group_id); 
 
-
----- function + trigger
--- before insert
+-- 1. BEFORE INSERT 트리거 (level, group_order_id, group_id 초기 세팅)CREATE OR REPLACE FUNCTION trg_posts_before_insert()
 CREATE OR REPLACE FUNCTION posts_before_insert()
 RETURNS TRIGGER AS $$
 DECLARE
     parent_group_id BIGINT;
     parent_level INT;
+    parent_group_order_id INT;
     max_order_id INT;
 BEGIN
     -- 루트 글이면 group_id = 자기 자신 ID
@@ -41,11 +40,14 @@ BEGIN
         -- group_id는 BEFORE INSERT에서는 NEW.id를 바로 사용할 수 없으므로, AFTER INSERT 트리거에서 업데이트 필요
         -- 여기서는 임시 0으로 두고 AFTER INSERT에서 업데이트 가능
         NEW.group_id := 0;
+        RETURN NEW;
     ELSE
         -- 댓글이면 부모 정보를 가져옴
-        SELECT group_id, level INTO parent_group_id, parent_level
+        SELECT group_id, level, group_order_id 
+        INTO parent_group_id, parent_level, parent_group_order_id
         FROM posts
-        WHERE id = NEW.parent_id;
+        WHERE id = NEW.parent_id
+        FOR UPDATE;
 
         -- 부모 그룹 그대로 사용
         NEW.group_id := parent_group_id;
@@ -53,25 +55,37 @@ BEGIN
         NEW.level := parent_level + 1;
 
         -- 그룹 내 순서 계산: 부모 그룹 내 최대 group_order_id + 1
-        SELECT COALESCE(MAX(group_order_id), 0) + 1
+        SELECT COALESCE(
+            MAX(group_order_id), parent_group_order_id
+        ) + 1
         INTO max_order_id
         FROM posts
         WHERE group_id = parent_group_id;
 
-        NEW.group_order_id := max_order_id;
+        NEW.group_order_id := max_sibling_order + 1;
+
+        -- 삽입 위치 이후 동일 그룹 내 노드 시프트
+        UPDATE posts
+        SET group_order_id = group_order_id + 1
+        WHERE group_id = parent_group
+          AND group_order_id >= NEW.group_order_id;
+
+        RETURN NEW;
     END IF;
 
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- 2. BEFORE INSERT 트리거 등록
 CREATE TRIGGER trg_posts_before_insert
 BEFORE INSERT ON posts
 FOR EACH ROW
 EXECUTE FUNCTION posts_before_insert();
 
 
--- after insert
+-- 3. AFTER INSERT 트리거 (루트 글 group_id 채움)
 CREATE OR REPLACE FUNCTION posts_after_insert()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -84,6 +98,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- 4. AFTER INSERT 트리거 등록
 CREATE TRIGGER trg_posts_after_insert
 AFTER INSERT ON posts
 FOR EACH ROW
