@@ -1,6 +1,6 @@
 // lib/tree.utils.ts
 import { TCategory } from '@/apis/getCategories.api';
-import { ETreeNodeType } from '@repo/markdown-parsing';
+import { ETreeNodeType } from '@/app/blog/blog.types';
 
 export type TreeNode = {
     id: number;
@@ -34,7 +34,7 @@ export function buildCategoryTree(categories: TCategory[]): TreeNode[] {
             // TODO click category?
             href: `/category/${c.title}`,
             // type: c.type
-            type: c.type
+            type: c.type,
         });
     });
 
