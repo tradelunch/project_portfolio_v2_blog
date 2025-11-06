@@ -4,8 +4,6 @@
         "build": {
             "dependsOn": ["^build"]
         },
-        "dev": {
-            "dependsOn": ["build"]
-        }
+        "dev": {}
     }
 }

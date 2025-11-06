@@ -1,31 +1,31 @@
 // apps/article_server/src/env.schema.ts
-import { z } from "zod";
-import dotenv from "dotenv";
-import path from "path";
+import { z } from 'zod';
+import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 const envSchema = z.object({
-	NODE_ENV: z
-		.enum(["development", "production", "test"])
-		.default("development"),
-	PORT: z.coerce.number().default(4000),
-	HOST_NAME: z.string().default("localhost"),
+    NODE_ENV: z
+        .enum(['development', 'production', 'test'])
+        .default('development'),
+    PORT: z.coerce.number().default(4000),
+    HOST_NAME: z.string().default('localhost'),
 
-	DB_PG_HOST: z.string().default("localhost"),
-	DB_PG_DATABASE: z.string().default("db20250627"),
-	DB_PG_USER: z.string().default("super"),
-	DB_PG_PASSWORD: z.string().default(""),
-	DB_PG_PORT: z.coerce.number().default(5432),
+    DB_PG_HOST: z.string().default('localhost'),
+    DB_PG_DATABASE: z.string().default('db20250627'),
+    DB_PG_USER: z.string().default('super'),
+    DB_PG_PASSWORD: z.string().default(''),
+    DB_PG_PORT: z.coerce.number().default(5432),
 
-	// aws
-	AWS_REGION: z.string().default("localhost"),
-	AWS_ACCESS_KEY_ID: z.string().default("localhost"),
-	AWS_SECRET_ACCESS_KEY: z.string().default("localhost"),
-	AWS_S3_BUCKET: z.string().default("localhost"),
+    // aws
+    AWS_REGION: z.string().default('localhost'),
+    AWS_ACCESS_KEY_ID: z.string().default('localhost'),
+    AWS_SECRET_ACCESS_KEY: z.string().default('localhost'),
+    AWS_S3_BUCKET: z.string().default('localhost'),
 
-	// CDN
-	CDN_ASSET_POSTS: z.string().default("https://posts.prettylog.com/"),
+    // CDN
+    CDN_ASSET_POSTS: z.string().default('https://posts.prettylog.com/'),
 });
 
 export const env = envSchema.parse(process.env);

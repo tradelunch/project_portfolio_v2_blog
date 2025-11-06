@@ -29,8 +29,6 @@ body {
         rgb(var(--background-start-rgb));
 } */
 
-@import './shadcn.css';
-
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -74,3 +72,6 @@ body {
         @apply bg-background text-foreground;
     }
 }
+
+@import './shadcn.css';
+@import './shadcn.green.css';
