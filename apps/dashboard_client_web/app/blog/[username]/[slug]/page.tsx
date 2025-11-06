@@ -23,7 +23,7 @@ export default async function BlogDetailPage({ params }: Props) {
         <div
             className={clsx(
                 'blog-username-slug',
-                'prose md:max-w-2xl p-5',
+                'p-5 w-full max-w-lg xl:max-w-2xl mx-auto',
                 'text-sm',
                 'bg-background',
                 'border border-primary rounded-lg'

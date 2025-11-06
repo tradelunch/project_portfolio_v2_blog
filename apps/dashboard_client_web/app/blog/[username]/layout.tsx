@@ -20,23 +20,27 @@ import clsx from 'clsx';
 
 export const BlogUserLayout = ({ children }: { children: React.ReactNode }) => {
     return (
-        <SidebarProvider>
-            <AppSidebar side="left" />
+        <div className={clsx('relative', 'w-full')}>
+            <SidebarProvider>
+                <AppSidebar side="left" />
 
-            <SidebarInset>
-                {/* <SiteHeader /> */}
+                <SidebarInset>
+                    {/* <SiteHeader /> */}
 
-                <section
-                    className={clsx(
-                        'flex flex-1 flex-col gap-4',
-                        'items-center',
-                        'px-4 py-8'
-                    )}
-                >
-                    {children}
-                </section>
-            </SidebarInset>
-        </SidebarProvider>
+                    <section
+                        className={clsx(
+                            'blog-username-layout',
+                            'w-full',
+                            'flex flex-1 flex-col gap-4',
+                            'items-center',
+                            'px-4 py-8'
+                        )}
+                    >
+                        {children}
+                    </section>
+                </SidebarInset>
+            </SidebarProvider>
+        </div>
     );
 };
 

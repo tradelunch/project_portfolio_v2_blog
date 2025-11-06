@@ -56,13 +56,14 @@ const remarkComponents: any = {
         />
     ),
     pre: ({ node, ...props }: any) => (
-        <pre
+        <div
             className="rounded-lg my-3 overflow-x-auto bg-[#282c34] text-gray-100 p-4"
             {...props}
         />
     ),
     code({ inline, className, children, ...props }: any) {
         const match = /language-(\w+)/.exec(className || '');
+
         return !inline && match ? (
             <SyntaxHighlighter
                 style={oneDark}
