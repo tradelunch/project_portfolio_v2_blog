@@ -10,7 +10,7 @@ import {
     CarouselNext,
 } from '@/components/ui/carousel';
 import { Card, CardContent } from '@/components/ui/card';
-import { PostCard } from '@/components/blog/ArticleCard';
+import { PostCard } from '@/components/blog/PostCard.server';
 
 type Post = {
     id: number;

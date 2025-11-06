@@ -12,6 +12,8 @@ import { getLocale, getMessages } from 'next-intl/server';
 import '@repo/ui/styles.css';
 import '@/styles/globals.css';
 
+import DesktopNavigation from '@/components/navigation-desktop';
+
 const geist = Geist({
     subsets: ['latin'],
     variable: '--font-geist',
@@ -72,16 +74,17 @@ export default async function RootLayout({
                         enableSystem
                         disableTransitionOnChange
                     >
-                        {/* <header className="sticky top-0 z-50 border-b-2 border-foreground bg-background">
-                        <div className="mx-auto max-w-[95vw] px-2">
-                            <DesktopNavigation />
-                        </div>
-                    </header> */}
+                        <header className="sticky top-0 z-50 border-b-2 border-foreground bg-background">
+                            <div className="mx-auto max-w-[95vw] px-2">
+                                <DesktopNavigation />
+                            </div>
+                        </header>
 
                         {/* <header className={clsx('flex')}>
-                        <NavigationMenuDemo />
-                    </header> */}
-                        <main className="flex-1">{children}</main>
+                            <NavigationMenuDemo />
+                        </header> */}
+
+                        <div className="flex-1">{children}</div>
 
                         {/* <footer>Main footer</footer> */}
                         <ClientTrailCursorCanvas />

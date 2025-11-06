@@ -12,7 +12,7 @@ const LINKS = [
     },
     {
         title: 'blog',
-        href: '/blog',
+        href: '/blog/@taeklim',
         description: 'Technology blog',
     },
     {

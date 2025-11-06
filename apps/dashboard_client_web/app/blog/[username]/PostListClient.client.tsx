@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { TPost } from '@/apis/getPosts.api';
 import { loadMorePosts } from '@/app/actions/post.action';
-import { PostCard } from '@/components/blog/ArticleCard';
+import { PostCard } from '@/components/blog/PostCard.server';
 
 type PostListClientProps = {
     username: string;
@@ -37,7 +37,7 @@ export function PostListClient({
         observerRef.current = new IntersectionObserver(
             (entries) => {
                 const [entry] = entries;
-                if (entry.isIntersecting && cursor !== null) {
+                if (entry?.isIntersecting && cursor !== null) {
                     startTransition(async () => {
                         const data = await loadMorePosts(username, cursor);
 

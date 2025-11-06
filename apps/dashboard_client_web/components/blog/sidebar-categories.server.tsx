@@ -10,11 +10,12 @@ import {
 } from '@/components/ui/sidebar';
 import { buildCategoryTree } from '@/utils/tree.utils';
 
-type CategorySidebarProps = {
-    username: string;
-};
+type CategorySidebarProps = {};
 
-export async function CategoriesGroup({ username }: CategorySidebarProps) {
+export async function CategoriesGroup({}: CategorySidebarProps) {
+    // TODO: dynamic username
+    const username = 'taeklim';
+
     const { categories } = await getCategoriesByUsername(username);
 
     if (!categories) {

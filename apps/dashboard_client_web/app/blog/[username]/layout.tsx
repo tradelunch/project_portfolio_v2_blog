@@ -24,9 +24,15 @@ export const BlogUserLayout = ({ children }: { children: React.ReactNode }) => {
             <AppSidebar side="left" />
 
             <SidebarInset>
-                <SiteHeader />
+                {/* <SiteHeader /> */}
 
-                <section className="flex flex-1 flex-col gap-4 py-4">
+                <section
+                    className={clsx(
+                        'flex flex-1 flex-col gap-4',
+                        'items-center',
+                        'px-4 py-8'
+                    )}
+                >
                     {children}
                 </section>
             </SidebarInset>
