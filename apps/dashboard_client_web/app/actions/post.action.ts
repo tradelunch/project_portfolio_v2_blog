@@ -3,7 +3,11 @@
 
 import { getBlogPostsByUsername } from '@/apis/getPosts.api';
 
-export async function loadMorePosts(username: string, cursor: number) {
-    const data = await getBlogPostsByUsername(username, cursor, 10);
+export async function loadMorePosts(
+    cursor: number,
+    limit: number,
+    username: string
+) {
+    const data = await getBlogPostsByUsername(cursor, limit, username);
     return data;
 }

@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import clsx from 'clsx';
 import { MarkdownRenderer } from '@/components/blog/MarkdownRenderer.server';
 import PostContent from '@/components/blog/PostContent.server';
+import { Suspense } from 'react';
 
 type Props = {
     params: Promise<{
@@ -20,20 +21,18 @@ export default async function BlogDetailPage({ params }: Props) {
     console.log('username:', decodedUsername, slug);
 
     return (
-        <div
+        <section
             className={clsx(
-                'blog-username-slug',
-                'p-5 w-full max-w-lg xl:max-w-2xl mx-auto',
-                'text-sm',
-                'bg-background',
-                'border border-primary rounded-lg'
+                'blog-username-slug'
+                // 'w-full xl:max-w-2xl ',
+                // 'p-4',
+                // 'text-sm',
+                // 'bg-background',
+                // 'border border-primary rounded-xl'
             )}
         >
+            
             <PostContent slug={slug} />
-
-            <div className="text-gray-500 text-sm mb-2">
-                작성자: {decodedUsername}
-            </div>
-        </div>
+        </section>
     );
 }

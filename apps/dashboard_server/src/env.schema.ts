@@ -3,7 +3,9 @@ import { z } from 'zod';
 import dotenv from 'dotenv';
 import path from 'path';
 
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+const dotEnvConfigPath =
+    process.env.NODE_ENV == 'production' ? '.env.production' : '.env';
+dotenv.config({ path: path.resolve(process.cwd(), dotEnvConfigPath) });
 
 const envSchema = z.object({
     NODE_ENV: z

@@ -15,6 +15,7 @@ CREATE TYPE if not exists users_auth_provider AS ENUM (
     'microsoft',
     'yahoo',
 );
+
 drop table if exists users;
 CREATE TABLE if not exists users (
     id              BIGSERIAL PRIMARY KEY,

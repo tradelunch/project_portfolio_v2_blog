@@ -239,10 +239,11 @@ export const MobileNavigation = () => {
                     {/* Additional Info */}
                     <div className="mt-6 p-4 border-2 border-primary/30 bg-secondary/50">
                         <div className="text-sm font-mono text-muted-foreground space-y-1">
-                            <p>&gt; Warrensburg, MO</p>
-                            <p>&gt; 660-238-5036</p>
-                            <p>&gt; tio.taek.lim@gmail.com</p>
-                            <p>&gt; Github: tradelunch</p>
+                            {/* <p>&gt; 660-238-5036</p> */}
+                            <p>&gt; TIO.TAEK.LIM@GMAIL.COM</p>
+                            <p>&gt; GITHUB: tradelunch</p>
+                            <p>&gt; LINKEDIN: tiotaeklim</p>
+                            <p>&gt; WARRENSBURG, MO 64093 USA</p>
                         </div>
                     </div>
                 </nav>

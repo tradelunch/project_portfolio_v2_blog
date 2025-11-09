@@ -1,5 +1,5 @@
 import BlogMainPage from '@/app/blog/BlogMainPage';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 type Props = {};
 
@@ -8,5 +8,3 @@ export const BlogPage = (props: Props) => {
 };
 
 export default BlogPage;
-
-//

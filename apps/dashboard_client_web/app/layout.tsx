@@ -54,6 +54,7 @@ export default async function RootLayout({
                 ibmPlexMono.variable
             )}
         >
+            <head></head>
             <body
                 className={clsx(
                     // geist.className,
@@ -86,8 +87,8 @@ export default async function RootLayout({
                         <div className="flex-1">{children}</div>
 
                         {/* <footer>Main footer</footer> */}
-                        <ClientTrailCursorCanvas />
-                        <ClientTrailCursorDom />
+                        {/* <ClientTrailCursorCanvas /> */}
+                        {/* <ClientTrailCursorDom /> */}
                     </ThemeProvider>
                 </NextIntlClientProvider>
             </body>

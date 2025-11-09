@@ -11,55 +11,105 @@ import { QueryTypes } from 'sequelize';
 export const router = Router();
 
 /**
- * @api {get} /posts Get all published posts
- * @apiName GetPosts
+ * @api {get} GET /posts
+ * @apiName GetUserPosts
  * @apiGroup Posts
  *
- * @apiParam {Number} [page=1] Page number for pagination.
- * @apiParam {Number} [limit=20] Number of posts per page.
+ * @apiParam {Number} [cursor=0] Cursor for pagination (post ID to start from).
+ * @apiParam {Number} [limit=10] Number of posts per page.
  *
  * @apiSuccess {Boolean} success Indicates if the request was successful.
- * @apiSuccess {Object[]} data List of posts.
- * @apiSuccess {Number} total Total number of posts.
- * @apiSuccess {Number} page Current page number.
- * @apiSuccess {Number} totalPages Total number of pages.
+ * @apiSuccess {Object[]} posts List of the user's most recent posts for each slug.
+ * @apiSuccess {Number} nextCursor Next cursor value (null if no more posts).
+ * @apiSuccess {Boolean} hasMore Indicates if more posts are available.
  */
 router.get(
-    '/',
+    '',
     async (
-        req: Request<{}, {}, {}, { page?: string; limit?: string }>,
+        req: Request<{}, {}, {}, { cursor?: string; limit?: string }>,
         res
     ) => {
         try {
-            const page = parseInt(req.query.page || '1', 10);
-            const limit = parseInt(req.query.limit || '20', 10);
-            const offset = (page - 1) * limit;
+            const cursor = parseInt(req.query.cursor || '0', 10);
+            const limit = parseInt(req.query.limit || '10', 10);
 
-            // Using sequelize.query with replacements for security.
-            // The result for a raw SELECT query is an array of objects.
-            const countResult: { count: string }[] = await sequalizeP.query(
-                'SELECT COUNT(*) FROM posts',
-                { type: QueryTypes.SELECT }
-            );
-            const count = parseInt(countResult[0].count, 10);
+            // Fetch one extra row to determine if there are more posts
+            const fetchLimit = limit + 1;
 
-            const rows = await sequalizeP.query(
-                'SELECT * FROM posts ORDER BY created_at DESC LIMIT :limit OFFSET :offset',
-                {
-                    replacements: { limit, offset },
-                    type: QueryTypes.SELECT,
-                }
-            );
+            const postsQuery = `
+                WITH ranked_posts AS (
+                    SELECT
+                        p.id,
+                        p.user_id,
+                        p.slug,
+                        p.title,
+                        p.description,
+                        p.content,
+                        p.status,
+                        p.created_at,
+                        p.updated_at,
+                        p.category_id,
+                        f.stored_uri,
+                        c.title as category,
+                        p.created_at as date,
+                        ROW_NUMBER() OVER(PARTITION BY p.slug ORDER BY p.created_at DESC) as rn
+                    FROM posts p
+                    INNER JOIN users u ON p.user_id = u.id
+                    LEFT JOIN files f ON p.id = f.post_id AND f.is_thumbnail = true
+                    LEFT JOIN categories c ON c.id = p.category_id
+
+                    WHERE 
+                        p.deleted_at IS NULL
+                        AND u.deleted_at IS NULL
+                        -- AND (f.deleted_at IS NULL OR f.deleted_at IS NOT NULL
+                        ${cursor > 0 ? 'AND p.id < :cursor' : ''}
+                )
+                SELECT 
+                    id,
+                    user_id,
+                    slug,
+                    title,
+                    description,
+                    content,
+                    status,
+                    created_at,
+                    updated_at,
+                    category_id,
+                    stored_uri,
+                    category,
+                    date
+                FROM ranked_posts
+                WHERE rn = 1
+                ORDER BY id DESC
+                LIMIT :fetchLimit
+            `;
+
+            const rows: any[] = await sequalizeP.query(postsQuery, {
+                replacements: {
+                    cursor: cursor || Number.MAX_SAFE_INTEGER,
+                    fetchLimit,
+                },
+                type: QueryTypes.SELECT,
+            });
+
+            // Check if there are more posts
+            const hasMore = rows.length > limit;
+            const posts = hasMore ? rows.slice(0, limit) : rows;
+            const nextCursor =
+                hasMore && posts.length > 0 ? posts[posts.length - 1].id : null;
+
+            const data = {
+                posts,
+                nextCursor,
+                hasMore,
+            };
 
             res.json({
                 success: true,
-                data: rows,
-                total: count,
-                page: page,
-                totalPages: Math.ceil(count / limit) || 0,
+                data,
             });
         } catch (error) {
-            console.error('API Error fetching posts:', error);
+            console.error('API Error fetching user posts:', error);
             res.status(500).json({
                 success: false,
                 message: 'Failed to fetch posts',
@@ -111,16 +161,22 @@ router.get(
                         p.description,
                         p.content,
                         p.status,
-                        p.created_at,
-                        p.updated_at,
                         p.category_id,
+                        p.updated_at,
+                        p.created_at,
+                        p.created_at as date,
                         f.stored_uri,
+                        c.title as category,
+                        u.username,
                         ROW_NUMBER() OVER(PARTITION BY p.slug ORDER BY p.created_at DESC) as rn
-                    FROM posts p
-                    INNER JOIN users u ON p.user_id = u.id
-                    LEFT JOIN files f ON p.id = f.post_id AND f.is_thumbnail = true
-                    WHERE u.username = :username
-                        AND p.deleted_at IS NULL
+                    FROM 
+                        posts p
+                        INNER JOIN users u ON p.user_id = u.id
+                        LEFT JOIN files f ON p.id = f.post_id AND f.is_thumbnail = true
+                        LEFT JOIN categories c ON p.category_id = c.id
+                    WHERE 
+                        p.deleted_at IS NULL
+                        AND u.username = :username
                         AND u.deleted_at IS NULL
                         -- AND (f.deleted_at IS NULL OR f.deleted_at IS NOT NULL
                         ${cursor > 0 ? 'AND p.id < :cursor' : ''}
@@ -128,6 +184,7 @@ router.get(
                 SELECT 
                     id,
                     user_id,
+                    username,
                     slug,
                     title,
                     description,
@@ -136,7 +193,9 @@ router.get(
                     created_at,
                     updated_at,
                     category_id,
-                    stored_uri
+                    stored_uri,
+                    category,
+                    date
                 FROM ranked_posts
                 WHERE rn = 1
                 ORDER BY id DESC
@@ -233,9 +292,15 @@ router.get('/slug/:slug', async (req, res) => {
         const { username } = req.query;
 
         const query = `
-			SELECT p.*
-			FROM posts p
-			INNER JOIN users u ON p.user_id = u.id
+			SELECT 
+                p.*,
+                u.username,
+                f.stored_uri,
+                p.created_at as date
+			FROM 
+                posts p 
+                INNER JOIN users u ON p.user_id = u.id
+                INNER JOIN files f ON p.id = f.post_id
 			WHERE p.slug = :slug
 			${username ? 'AND u.username = :username' : ''}
 			ORDER BY p.created_at DESC

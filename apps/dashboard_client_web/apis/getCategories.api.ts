@@ -1,4 +1,5 @@
 // apis/getCategories.api.ts
+import { TTreeNode } from '@/apis/blog.types';
 import { axios_instance } from '@repo/axios';
 import { ETreeNodeType } from '@repo/markdown-parsing';
 
@@ -15,7 +16,7 @@ export type TCategory = {
 
 export type TCategoriesResponse = {
     success: boolean;
-    categories: TCategory[];
+    categories: TTreeNode[];
 };
 
 export async function getCategoriesByUsername(

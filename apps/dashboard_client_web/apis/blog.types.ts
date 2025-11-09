@@ -12,12 +12,13 @@ export interface TCategoryTreeNode {
     type: ETreeNodeType.CATEGORY;
     id: number;
     title: string;
-    parent_id: number | null;
-    level: number;
-    group_id: number | null;
-    priority: number;
-    post_id: null;
     slug: null;
+    parent_id: number | null;
+    group_id: number | null;
+    level: number;
+    priority: number;
+    username: string;
+    post_id: null;
     description: null;
     created_at: null;
     updated_at: null;
@@ -28,12 +29,13 @@ export interface TPostTreeNode {
     type: ETreeNodeType.POST;
     id: number;
     title: string;
-    parent_id: number;
-    level: number;
-    group_id: null;
-    priority: number;
-    post_id: number;
     slug: string;
+    parent_id: number;
+    group_id: null;
+    level: number;
+    priority: number;
+    username: string;
+    post_id: number;
     description: string | null;
     created_at: string;
     updated_at: string;
@@ -47,20 +49,40 @@ export type TTreeNodeWithChildren = TTreeNode & {
     postCount?: number;
 };
 
-export interface FeaturedPost {
+export type TPost = {
+    id?: number;
+    content?: string;
     title: string;
-    author: string;
-    views: number;
+    description?: string;
+    status?: string;
+    slug?: string;
+    stored_uri?: string;
+    user_id?: number;
+    category_id?: string;
+    category?: string;
+    created_at?: string;
+    updated_at?: string;
+    date?: string;
+
+    // TODO
     comments?: number;
+    upvotes?: number;
+    author?: string;
+    views?: number;
+    username?: string;
+};
+
+export interface FeaturedPost extends TPost {
     reposts?: number;
-    category: string;
-    date: string;
 }
 
-export interface RecentPost {
-    title: string;
-    description: string;
-    category: string;
-    date: string;
-    readTime: string;
+export interface RecentPost extends TPost {
+    readTime?: string;
 }
+
+export type TPaginatedResponse = {
+    success: boolean;
+    posts: TPost[];
+    nextCursor: number | null;
+    hasMore: boolean;
+};

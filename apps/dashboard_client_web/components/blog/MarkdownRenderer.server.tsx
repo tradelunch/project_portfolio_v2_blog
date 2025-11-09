@@ -33,7 +33,7 @@ const rehypePlugins: any = [
 const remarkComponents: any = {
     h1: ({ node, ...props }: any) => (
         <h1
-            className="text-3xl font-semibold my-4  pb-2 text-primary"
+            className="text-3xl font-semibold my-4 pb-2 text-primary"
             {...props}
         />
     ),
@@ -84,7 +84,7 @@ const remarkComponents: any = {
     },
     a: ({ node, ...props }: any) => (
         <a
-            className="text-primary hover:underline hover:text-destructive"
+            className="text-primary hover:underline hover:text-foreground/90"
             // target="_blank"
             rel="noopener noreferrer"
             {...props}
@@ -110,12 +110,14 @@ const remarkComponents: any = {
     ),
 };
 
-export const MarkdownRenderer = ({ content }: { content: string }) => (
-    <ReactMarkdown
-        remarkPlugins={remarkPlugins}
-        rehypePlugins={rehypePlugins}
-        components={remarkComponents}
-    >
-        {content}
-    </ReactMarkdown>
-);
+export const MarkdownRenderer = ({ content }: { content: string }) => {
+    return (
+        <ReactMarkdown
+            remarkPlugins={remarkPlugins}
+            rehypePlugins={rehypePlugins}
+            components={remarkComponents}
+        >
+            {content}
+        </ReactMarkdown>
+    );
+};

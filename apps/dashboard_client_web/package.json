@@ -5,8 +5,8 @@
     "private": true,
     "scripts": {
         "dev": "cross-env NODE_ENV=development next dev --port 3001 --turbopack",
-        "build": "next build",
-        "start": "next start",
+        "build": "cross-env NODE_ENV=production next build",
+        "start": "cross-env NODE_ENV=production next start",
         "lint": "next lint --max-warnings 0",
         "check-types": "tsc --noEmit"
     },
@@ -29,8 +29,11 @@
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "cmdk": "^1.1.1",
+        "date-fns": "^4.1.0",
+        "date-fns-tz": "^3.2.0",
         "embla-carousel-react": "^8.6.0",
         "highlight.js": "^11.11.1",
+        "jotai": "^2.15.1",
         "katex": "^0.16.25",
         "lucide-react": "^0.548.0",
         "next": "^16.0.0",

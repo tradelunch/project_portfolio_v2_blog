@@ -1,20 +1,23 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { FeaturedPostCard } from '@/app/blog/FeaturedPostCard';
+import { use, useRef, useState } from 'react';
+import { FeaturedPostCard } from '@/app/blog/FeaturedPostCard.server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FeaturedPost } from '@/app/blog/blog.types';
+import { FeaturedPost, TPaginatedResponse } from '@/apis/blog.types';
 
 // ============================================================================
 // FeaturedPostsCarousel Component
 // ============================================================================
+
 interface FeaturedPostsCarouselProps {
-    posts: FeaturedPost[];
+    data: Promise<TPaginatedResponse>;
 }
 
-export const FeaturedPostsCarousel: React.FC<FeaturedPostsCarouselProps> = ({
-    posts,
-}) => {
+export const FeaturedPostsCarouselClient: React.FC<
+    FeaturedPostsCarouselProps
+> = ({ data }) => {
+    const { posts, nextCursor, hasMore } = use(data);
+
     const [currentSlide, setCurrentSlide] = useState(0);
     const carouselRef = useRef<HTMLDivElement>(null);
 
@@ -46,6 +49,7 @@ export const FeaturedPostsCarousel: React.FC<FeaturedPostsCarouselProps> = ({
                     <CardTitle className="text-primary text-sm sm:text-base">
                         &gt; FEATURED_POSTS
                     </CardTitle>
+
                     <div className="flex gap-2">
                         <button
                             onClick={prevSlide}
@@ -54,6 +58,7 @@ export const FeaturedPostsCarousel: React.FC<FeaturedPostsCarouselProps> = ({
                         >
                             ‹
                         </button>
+
                         <button
                             onClick={nextSlide}
                             className="w-8 h-8 border border-primary flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
@@ -103,6 +108,7 @@ export const FeaturedPostsCarousel: React.FC<FeaturedPostsCarouselProps> = ({
             </CardContent>
 
             <style
+                // @ts-ignore
                 jsx
                 global
             >{`

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import clsx from 'clsx';
 import {
     Card,
     CardContent,
@@ -8,9 +9,10 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import clsx from 'clsx';
+
 import { ScrollToTopButton } from '@/app/ScrollToTop';
 
 // Main Terminal Profile Component
@@ -46,8 +48,9 @@ const TerminalProfile = () => {
         return () => clearInterval(timer);
     }, []);
 
-    const scrollToSection = (section) => {
+    const scrollToSection = (section: string) => {
         setActiveSection(section);
+        // @ts-ignore
         sectionRefs[section].current?.scrollIntoView({
             behavior: 'smooth',
             block: 'start',
@@ -208,8 +211,10 @@ const TerminalProfile = () => {
                             </div>
 
                             <CardDescription className="mt-2">
-                                Warrensburg, MO | 660-238-5036 |
-                                tio.taek.lim@gmail.com | Github: tradelunch
+                                Warrensburg, MO | tio.taek.lim@gmail.com |
+                                Github: tradelunch
+                                {/* Warrensburg, MO | 660-238-5036 | */}
+                                {/* tio.taek.lim@gmail.com | Github: tradelunch */}
                             </CardDescription>
                         </div>
                     </CardHeader>

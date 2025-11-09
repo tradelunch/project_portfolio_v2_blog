@@ -1,36 +1,30 @@
 // apis/getPosts.api.ts
+import { TPaginatedResponse } from '@/apis/blog.types';
 import { axios_instance } from '@repo/axios'; // 경로는 프로젝트에 맞게 조정
 
-export type TPost = {
-    id: number;
-    title: string;
-    content: string;
-    slug: string;
-    stored_uri: string;
-    created_at: string;
-    updated_at: string;
-    user_id: number;
-};
-
-export type TPaginatedResponse = {
-    success: boolean;
-    posts: TPost[];
-    nextCursor: number | null;
-    hasMore: boolean;
-};
-
 export async function getBlogPostsByUsername(
-    username: string,
     cursor: number = 0,
-    limit: number = 10
+    limit: number = 10,
+    username: string = ''
 ): Promise<TPaginatedResponse> {
     try {
-        const response = await axios_instance.get<TPaginatedResponse>(
-            `/v1/api/posts/users/${username}`,
-            {
-                params: { cursor, limit },
-            }
-        );
+        const url = username
+            ? `/v1/api/posts/users/${username}`
+            : `/v1/api/posts`;
+
+        const response = await axios_instance.get<TPaginatedResponse>(url, {
+            params: { cursor, limit },
+            headers: {
+                // 'Cache-Control':
+                //     'no-store, no-cache, must-revalidate, proxy-revalidate',
+                // Pragma: 'no-cache',
+                // Expires: '0',
+                'Cache-Control': 'public, max-age=3600',
+                Expires: new Date(Date.now() + 3600 * 1000).toUTCString(),
+            },
+        });
+
+        console.log(response);
 
         return response.data;
     } catch (error) {
@@ -38,3 +32,22 @@ export async function getBlogPostsByUsername(
         throw new Error('Failed to fetch posts');
     }
 }
+
+// export async function getBlogPosts(
+//     cursor: number = 0,
+//     limit: number = 10
+// ): Promise<TPaginatedResponse> {
+//     try {
+//         const response = await axios_instance.get<TPaginatedResponse>(
+//             `/v1/api/posts`,
+//             {
+//                 params: { cursor, limit },
+//             }
+//         );
+
+//         return response.data;
+//     } catch (error) {
+//         console.error('Failed to fetch posts:', error);
+//         throw new Error('Failed to fetch posts');
+//     }
+// }

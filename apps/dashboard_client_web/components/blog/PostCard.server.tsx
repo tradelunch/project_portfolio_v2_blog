@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { TPost } from '@/apis/getPosts.api';
+import { TPost } from '@/apis/blog.types';
 import {
     Card,
     CardContent,

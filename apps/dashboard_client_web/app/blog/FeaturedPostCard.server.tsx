@@ -1,7 +1,8 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { FeaturedPost } from '@/app/blog/blog.types';
 import { cn } from '@/lib/utils';
+
+import { Badge } from '@/components/ui/badge';
+import { FeaturedPost } from '@/apis/blog.types';
 
 // ============================================================================
 // FeaturedPostCard Component
