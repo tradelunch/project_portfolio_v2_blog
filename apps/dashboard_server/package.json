@@ -4,7 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "dev": "cross-env NODE_ENV=development tsx watch src/index.ts",
+        "dev": "cross-env NODE_ENV=development tsx watch --tsconfig tsconfig.json  src/index.ts -r ts-aliases/register ",
         "dev:nodemon": "cross-env NODE_ENV=development nodemon",
         "build": "tsc && tsc-alias",
         "start": "node dist/index.js",
@@ -34,6 +34,7 @@
         "pg-hstore": "^2.3.4",
         "sequelize": "^6.37.7",
         "snowflake-id": "^1.1.0",
+        "tunnel-ssh": "^5.2.0",
         "zod": "^4.1.12"
     },
     "devDependencies": {

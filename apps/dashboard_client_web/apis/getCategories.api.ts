@@ -19,6 +19,31 @@ export type TCategoriesResponse = {
     categories: TTreeNode[];
 };
 
+// export async function getCategoriesByUsername(
+//     username: string
+// ): Promise<TCategoriesResponse> {
+//     try {
+//         const response = await axios_instance.get<TCategoriesResponse>(
+//             `/v1/api/posts/users/${username}/categories`
+//         );
+
+//         console.log(
+//             '>> api categories: ',
+//             { status: response.status },
+//             { data: response.data }
+//         );
+
+//         if (!response.success) {
+//             throw new Error(`HTTP ${response.status}`);
+//         }
+
+//         return await response.data;
+//     } catch (error) {
+//         console.error('Failed to fetch categories:', error);
+//         throw error; // Re-throw original error
+//     }
+// }
+
 export async function getCategoriesByUsername(
     username: string
 ): Promise<TCategoriesResponse> {
@@ -27,15 +52,19 @@ export async function getCategoriesByUsername(
             `/v1/api/posts/users/${username}/categories`
         );
 
-        console.log('categoriesL ', response.data);
+        console.log('>> api categories: ', {
+            status: response.status,
+            data: response.data,
+        });
 
-        if (!response.ok) {
+        // 올바르게 success 체크
+        if (!response.success) {
             throw new Error(`HTTP ${response.status}`);
         }
 
-        return await response.data;
+        return response.data;
     } catch (error) {
         console.error('Failed to fetch categories:', error);
-        throw error; // Re-throw original error
+        throw error;
     }
 }

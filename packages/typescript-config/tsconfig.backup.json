@@ -1,73 +1,73 @@
 {
-	"compilerOptions": {
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"module": "esnext",
-		"moduleResolution": "bundler",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"incremental": true,
-		"plugins": [
-			{
-				"name": "next"
-			}
-		],
-		"paths": {
-			"@/*": ["./src/*"],
-			"@/svgs/*": ["./src/assets/svgs/*"],
-			"@/components/*": ["./src/components/*"],
-			"@/ui/*": ["./src/components/ui/*"],
-			"@/_types/*": ["./src/_types/*"]
-		},
-		"typeRoots": [
-			"./node_modules/@types",
-			"./src/_types",
-			"**/_types",
-			"./typings"
-		],
-		"target": "ES2017"
-	},
-	// "include": [
-	//     "**/*.ts",
-	//     "**/*.tsx",
-	//     "**/types/**/*.ts",
-	//     ".next/types/**/*.ts",
-	//     "next-env.d.ts",
-	//     "sr/types/**/*",
-	//     "./dist/types/**/*.ts"
-	// ],
-	"include": [
-		"svgr.d.ts",
-		"next-env.d.ts",
-		"**/*.ts",
-		"**/*.tsx",
-		".next/types/**/*.ts",
-		"**/scripts/*",
+    "compilerOptions": {
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "noEmit": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "incremental": true,
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ],
+        "paths": {
+            "@/*": ["./src/*"],
+            "@/svgs/*": ["./src/assets/svgs/*"],
+            "@/components/*": ["./src/components/*"],
+            "@/ui/*": ["./src/components/ui/*"],
+            "@/_types/*": ["./src/_types/*"]
+        },
+        "typeRoots": [
+            "./node_modules/@types",
+            "./src/_types",
+            "**/_types",
+            "./typings"
+        ],
+        "target": "ES2017"
+    },
+    // "include": [
+    //     "**/*.ts",
+    //     "**/*.tsx",
+    //     "**/types/**/*.ts",
+    //     ".next/types/**/*.ts",
+    //     "next-env.d.ts",
+    //     "sr/types/**/*",
+    //     "./dist/types/**/*.ts"
+    // ],
+    "include": [
+        "svgr.d.ts",
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        ".next/types/**/*.ts",
+        "**/scripts/*",
 
-		"scripts/**/*.ts",
-		"src/**/*.ts",
-		"src/_types/**/*.ts",
-		"**/_types/**/*.ts"
-	],
+        "scripts/**/*.ts",
+        "src/**/*.ts",
+        "src/_types/**/*.ts",
+        "**/_types/**/*.ts"
+    ],
 
-	"exclude": [
-		// Dependencies
-		"node_modules",
+    "exclude": [
+        // Dependencies
+        "node_modules",
 
-		// Test and documentation files
-		"*.stories.*", // Storybook files
-		"*.spec.*", // Test files
-		"*.mock.*", // Mock files
-		"docs", // Documentation directory
+        // Test and documentation files
+        "*.stories.*", // Storybook files
+        "*.spec.*", // Test files
+        "*.mock.*", // Mock files
+        "docs", // Documentation directory
 
-		// Custom patterns
-		"tio-*", // Files starting with tio-
-		"**/deprecated*/**", // All deprecated directories
-		"src/features/**/deprecated*/**" // Specifically exclude deprecated pages
-	]
+        // Custom patterns
+        "tio-*", // Files starting with tio-
+        "**/deprecated*/**", // All deprecated directories
+        "src/features/**/deprecated*/**" // Specifically exclude deprecated pages
+    ]
 }

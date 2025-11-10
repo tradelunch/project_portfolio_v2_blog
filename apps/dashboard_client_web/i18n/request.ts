@@ -27,7 +27,16 @@ type LocaleMessages = {
 // and provides type safety when accessing `messages` with an `AppLocale` key.
 const messages: Record<AppLocale, LocaleMessages> = {
     en: { common: en_common, blog: en_blog },
-    ko: { common: ko_common, blog: ko_blog },
+    ko: {
+        common: {
+            ...en_blog,
+            ...ko_common,
+        },
+        blog: {
+            ...en_blog,
+            ...ko_blog,
+        },
+    },
 };
 
 export default getRequestConfig(async ({ locale }) => {

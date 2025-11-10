@@ -26,6 +26,7 @@ interface CategorySidebarProps {
 export const CategorySidebar: React.FC<CategorySidebarProps> = ({
     categories,
 }) => {
+    console.log({ categories });
     const [selectedNode, setSelectedNode] = useState<number | null>(null);
 
     const router = useRouter();

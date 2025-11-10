@@ -482,7 +482,7 @@ router.get('/users/:username/categories', async (req, res) => {
             data: { categories },
         };
 
-        res.json(response);
+        res.status(200).json(response);
     } catch (error) {
         console.error('API Error fetching categories:', error);
         res.status(500).json({
