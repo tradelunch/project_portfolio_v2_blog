@@ -6,6 +6,10 @@ import path from 'path';
 // Load default .env first
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
+export const IS_DEVELOPMENT = process.env.NODE_ENV == 'development';
+export const IS_LOCAL = process.env.NODE_ENV == 'local';
+export const IS_PRODUCTION = process.env.NODE_ENV == 'production';
+
 const dotEnvConfigPath =
     process.env.NODE_ENV == 'production'
         ? '.env.production'
@@ -71,8 +75,6 @@ export const AWS_S3_BUCKET = env.AWS_S3_BUCKET;
 export const AWS_RDS_CA = env.AWS_RDS_CA;
 
 export const CDN_ASSET_POSTS = env.CDN_ASSET_POSTS;
-
-export const IS_DEVELOPMENT = env.NODE_ENV !== 'production';
 
 export const EC2_HOST = env.EC2_HOST;
 export const EC2_PORT = env.EC2_PORT;

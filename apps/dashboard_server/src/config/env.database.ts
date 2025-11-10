@@ -8,6 +8,7 @@ import {
     EC2_HOST,
     EC2_USERNAME,
     IS_DEVELOPMENT,
+    IS_LOCAL,
     NODE_ENV,
     SERVER_PORT,
 } from '@/src/config/env.schema';
@@ -31,27 +32,31 @@ interface SSHConfig {
 }
 
 interface EnvironmentConfig {
-    nodeEnv: 'development' | 'production' | 'test';
+    nodeEnv: 'development' | 'production' | 'test' | 'local';
     port: number;
     database: DatabaseConfig;
     ssh?: SSHConfig;
 }
 
-export const sshConfig: SSHTunnelConfig | undefined = IS_DEVELOPMENT
-    ? {
+export const sshConfig: SSHTunnelConfig | undefined = (() => {
+    if (IS_DEVELOPMENT) {
+        return {
             host: EC2_HOST!,
-        //   host: 'aws_20250627',
-          port: 22,
-          username: EC2_USERNAME || 'ec2-user',
-          useAgent: true,
+            //   host: 'aws_20250627',
+            port: 22,
+            username: EC2_USERNAME || 'ec2-user',
+            useAgent: true,
 
-          //   keyPath: path.resolve(process.cwd(), 'src', AWS_RDS_CA!),
+            //   keyPath: path.resolve(process.cwd(), 'src', AWS_RDS_CA!),
 
-          dstHost: DB_PG_HOST!,
-          dstPort: 5432,
-          localPort: 5432,
-      }
-    : undefined;
+            dstHost: DB_PG_HOST!,
+            dstPort: 5432,
+            localPort: 5432,
+        };
+    }
+
+    return undefined;
+})();
 
 export const databaseEnv: EnvironmentConfig = {
     nodeEnv: NODE_ENV || 'developement',

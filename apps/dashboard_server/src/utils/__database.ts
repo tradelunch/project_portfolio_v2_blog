@@ -42,11 +42,11 @@ const config: Options = {
     },
 };
 
-export const sequelize = new Sequelize(config);
+export const sequalizeP = new Sequelize(config);
 
 export async function initializeDatabase(): Promise<void> {
     try {
-        await sequelize.authenticate();
+        await sequalizeP.authenticate();
         console.log('Database connected');
 
         // TODO cuz I do not use model

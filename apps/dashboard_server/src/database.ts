@@ -1,18 +1,40 @@
 // src/config/database.ts
 import { Sequelize, Options } from 'sequelize';
+import fs from 'fs';
+import path from 'path';
 
 import { databaseEnv as env } from '@/src/config/env.database';
-import { IS_DEVELOPMENT } from '@/src/config/env.schema';
+import { IS_DEVELOPMENT, IS_PRODUCTION } from '@/src/config/env.schema';
 
-const dialectOptions: any =
-    env.nodeEnv === 'production'
-        ? {
-              ssl: {
-                  require: true,
-                  rejectUnauthorized: false,
-              },
-          }
-        : undefined;
+const dialectOptions: any = (() => {
+    let dialectOptions = undefined;
+
+    if (true) {
+        const path_to_ca = path.resolve(
+            process.cwd(),
+            'src/certs/rds-combined-ca-bundle.pem'
+        );
+
+        dialectOptions = {
+            ssl: {
+                require: true,
+                rejectUnauthorized: true,
+                ca: fs.readFileSync(path_to_ca).toString(),
+            },
+        };
+    } else if (IS_DEVELOPMENT) {
+        dialectOptions = {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false,
+            },
+        };
+    }
+
+    console.log('>> postgres dialect options: ', dialectOptions);
+
+    return dialectOptions;
+})();
 
 const config: Options = {
     dialect: 'postgres',
@@ -43,7 +65,7 @@ const config: Options = {
     },
 };
 
-console.log(config)
+console.log('>> database config: ', config);
 export const sequalizeP = new Sequelize(config);
 
 export async function initializeDatabase(db: Sequelize): Promise<Sequelize> {
