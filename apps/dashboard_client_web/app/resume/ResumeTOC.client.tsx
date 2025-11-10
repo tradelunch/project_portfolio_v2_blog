@@ -2,6 +2,7 @@
 
 import React from 'react';
 import clsx from 'clsx';
+import Link from 'next/link';
 
 export const ResumeTOC = () => {
     const navItems = [
@@ -28,7 +29,7 @@ export const ResumeTOC = () => {
         >
             <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
                 {navItems.map((item) => (
-                    <a
+                    <Link
                         key={item.label}
                         href={item.href}
                         target="_blank"
@@ -41,7 +42,7 @@ export const ResumeTOC = () => {
                         )}
                     >
                         {item.label}
-                    </a>
+                    </Link>
                 ))}
             </div>
         </div>
