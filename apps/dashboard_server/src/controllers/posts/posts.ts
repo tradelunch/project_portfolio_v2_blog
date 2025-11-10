@@ -1,4 +1,4 @@
-import { sequalizeP } from '@/src/db';
+import { sequalizeP } from '@/src/database';
 import {
     ETreeNodeType,
     TCategoryTreeResponse,

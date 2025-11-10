@@ -7,8 +7,8 @@ import {
     upload_file_s3,
 } from '@/scripts/publish_post/upload_image';
 
-import { establishDBConnection } from '@/src/db';
-import { CDN_ASSET_POSTS } from '@/src/env.schema';
+import { initializeDatabase, sequalizeP } from '@/src/database';
+import { CDN_ASSET_POSTS } from '@/src/config/env.schema';
 
 import { Sequelize, Transaction } from 'sequelize';
 
@@ -27,7 +27,7 @@ const run = async () => {
     let tx: Transaction | null = null;
 
     try {
-        db = await establishDBConnection();
+        db = await initializeDatabase(sequalizeP);
         if (!db) throw new Error('Database connection not established.');
 
         tx = await db.transaction(); // 트랜잭션 시작

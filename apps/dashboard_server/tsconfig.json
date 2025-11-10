@@ -11,13 +11,14 @@
         "typeRoots": ["node_modules/@types", "types"]
     },
     "include": [
-        "utils/**/*",
+        "src/utils/**/*",
         "src/**/*",
         "types/**/*",
         "types/global.d.ts",
         "**/*.d.ts",
         "**/lib/*",
-        "scripts"
+        "scripts",
+        "config"
     ],
     "exclude": ["node_modules", "dist", "coverage"]
 }

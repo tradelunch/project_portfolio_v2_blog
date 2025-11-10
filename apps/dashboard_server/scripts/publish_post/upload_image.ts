@@ -1,5 +1,5 @@
 import { CustomSnowflake } from '@repo/markdown-parsing';
-import { AWS_S3_BUCKET } from '@/src/env.schema';
+import { AWS_S3_BUCKET } from '@/src/config/env.schema';
 import { s3 } from '@/src/lib/awsS3';
 import { GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';

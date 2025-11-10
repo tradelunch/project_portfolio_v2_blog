@@ -1,4 +1,4 @@
-import { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } from '@/src/env.schema';
+import { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } from '@/src/config/env.schema';
 import { S3Client } from '@aws-sdk/client-s3';
 
 export const s3 = new S3Client({
