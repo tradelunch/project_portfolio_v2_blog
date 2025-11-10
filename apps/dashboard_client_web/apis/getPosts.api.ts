@@ -29,7 +29,7 @@ export async function getBlogPostsByUsername(
         return response.data;
     } catch (error) {
         console.error('Failed to fetch posts:', error);
-        throw new Error('Failed to fetch posts');
+        throw new Error(`Failed to fetch posts: ${username}`);
     }
 }
 

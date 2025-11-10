@@ -11,8 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     buildCategoryTree,
     CategoryTree,
-} from '@/app/blog/CategoryTree.client';
-import { TCategoriesResponse } from '@/apis/getCategories.api';
+} from '@/app/blog/_components/CategoryTree.client';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
@@ -21,17 +20,11 @@ import { cn } from '@/lib/utils';
 // // ============================================================================
 
 interface CategorySidebarProps {
-    // nodes: TTreeNodeWithChildren[];
-    // selectedNode: number | null;
-    // onSelectNode: (id: number, node: TTreeNodeWithChildren) => void;
-    data: Promise<TCategoriesResponse>;
+    categories: TTreeNode[];
 }
 
 export const CategorySidebar: React.FC<CategorySidebarProps> = ({
-    // nodes,
-    // selectedNode,
-    // onSelectNode,
-    data,
+    categories,
 }) => {
     const [selectedNode, setSelectedNode] = useState<number | null>(null);
 
@@ -46,7 +39,6 @@ export const CategorySidebar: React.FC<CategorySidebarProps> = ({
         }
     };
 
-    const { categories } = use(data);
     const nodes: TTreeNodeWithChildren[] = buildCategoryTree(categories);
 
     return (

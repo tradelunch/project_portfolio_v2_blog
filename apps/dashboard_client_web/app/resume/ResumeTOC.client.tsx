@@ -10,7 +10,7 @@ export const ResumeTOC = () => {
         { label: 'GITHUB', href: 'https://github.com/tradelunch' },
         { label: 'ALGORITHMS', href: 'https://algorithm.prettylog.com/' },
         { label: 'PORTFOLIO', href: 'https://my.prettylog.com/' },
-        { label: 'EMAIL', href: 'mailto:tiotaeklim@gmail.com' },
+        { label: 'EMAIL', href: 'mailto:tio.taek.lim@gmail.com' },
         // { label: '-', href: '', active: false },
         // {
         //     label: 'Download PDF',

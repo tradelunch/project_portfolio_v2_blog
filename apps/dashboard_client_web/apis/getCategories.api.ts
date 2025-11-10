@@ -23,15 +23,19 @@ export async function getCategoriesByUsername(
     username: string
 ): Promise<TCategoriesResponse> {
     try {
-        const res = await axios_instance.get<TCategoriesResponse>(
+        const response = await axios_instance.get<TCategoriesResponse>(
             `/v1/api/posts/users/${username}/categories`
         );
 
-        console.log('categoriesL ', res.data);
+        console.log('categoriesL ', response.data);
 
-        return res.data;
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        return await response.data;
     } catch (error) {
         console.error('Failed to fetch categories:', error);
-        throw new Error('Failed to fetch categories');
+        throw error; // Re-throw original error
     }
 }

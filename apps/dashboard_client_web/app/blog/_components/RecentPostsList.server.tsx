@@ -1,9 +1,6 @@
 import { loadMorePosts } from '@/app/actions/post.action';
-
-import { RecentPostCard } from '@/app/blog/RecentPostCard.server';
-import { RecentPostsListClient } from '@/app/blog/RecentPostsList.client';
+import { RecentPostsListClient } from '@/app/blog/_components/RecentPostsList.client';
 import { CDN_ASSET_POSTS } from '@/env.schema';
-import { cn } from '@/lib/utils';
 
 // ============================================================================
 // RecentPostsList Component

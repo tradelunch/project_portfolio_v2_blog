@@ -1,13 +1,10 @@
-import { getCategoriesByUsername } from '@/apis/getCategories.api';
-import { CategorySidebar } from '@/app/blog/CategorySidebar.server';
-import { RightTechStackCard } from '@/app/blog/RightTechStackCard.client';
+import { CategoryErrorBoundary } from '@/app/blog/_components/CategoryErrorboundary.client';
+import { CategorySidebarWrapper } from '@/app/blog/_components/CategorySidebarWrapper.server';
+import { RightTechStackCard } from '@/app/blog/_components/RightTechStackCard.client';
 import { ScrollToTopButton } from '@/app/ScrollToTop';
 import { cn } from '@/lib/utils';
-import { Suspense } from 'react';
 
 export const BlogMainLayout = ({ children }: { children: React.ReactNode }) => {
-    const dataPromise = getCategoriesByUsername('taeklim');
-
     return (
         <div className="min-h-screen bg-background text-foreground font-mono">
             <div className="container mx-auto p-2 sm:p-4 md:p-8">
@@ -20,12 +17,9 @@ export const BlogMainLayout = ({ children }: { children: React.ReactNode }) => {
                                 'lg:sticky lg:top-4'
                             )}
                         >
-                            <Suspense
-                                fallback={<div>loading categories...</div>}
-                            >
-                                <CategorySidebar data={dataPromise} />
-                            </Suspense>
-
+                            <CategoryErrorBoundary>
+                                <CategorySidebarWrapper />
+                            </CategoryErrorBoundary>
                             <RightTechStackCard />
                         </div>
                     </aside>

@@ -1,10 +1,9 @@
 import { Suspense } from 'react';
 
-import { RecentPostsList } from '@/app/blog/RecentPostsList.server';
-
 import { FeaturedPost, RecentPost } from '@/apis/blog.types';
 import { getBlogPostsByUsername } from '@/apis/getPosts.api';
 import { loadMorePosts } from '@/app/actions/post.action';
+import { RecentPostsList } from '@/app/blog/_components/RecentPostsList.server';
 
 // ============================================================================
 // BlogMainPage Component (Example Usage)

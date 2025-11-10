@@ -1,4 +1,4 @@
-import BlogMainPage from '@/app/blog/BlogMainPage';
+import BlogMainPage from '@/app/blog/_components/BlogMainPage';
 
 type PageProps = {
     params: Promise<{ username: string }>;

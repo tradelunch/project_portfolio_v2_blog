@@ -1,6 +1,6 @@
 // components/CategorySidebar.tsx
 import { getCategoriesByUsername } from '@/apis/getCategories.api';
-import { buildCategoryTree } from '@/app/blog/CategoryTree.client';
+import { buildCategoryTree } from '@/app/blog/_components/CategoryTree.client';
 import { CategoryTree } from '@/components/blog/sidebar-category-tree.server';
 
 import {

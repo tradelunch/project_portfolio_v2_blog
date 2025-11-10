@@ -139,9 +139,8 @@ export const SaveBlock: React.FC<SaveBlockProps> = ({ onSave }) => {
     );
 };
 
-import { format } from 'date-fns';
 import Link from 'next/link';
-import { PostContentHeader } from '@/app/blog/PostContentHeader.server';
+import { PostContentHeader } from '@/app/blog/_components/PostContentHeader.server';
 
 // ============================================================================
 // RecentPostCard Component
