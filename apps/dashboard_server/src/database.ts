@@ -9,7 +9,7 @@ import { IS_DEVELOPMENT, IS_PRODUCTION } from '@/src/config/env.schema';
 const dialectOptions: any = (() => {
     let dialectOptions = undefined;
 
-    if (true) {
+    if (IS_PRODUCTION) {
         const path_to_ca = path.resolve(
             process.cwd(),
             'src/certs/rds-combined-ca-bundle.pem'
@@ -31,6 +31,12 @@ const dialectOptions: any = (() => {
         };
     }
 
+    dialectOptions = {
+        ssl: {
+            require: true,
+            rejectUnauthorized: false,
+        },
+    };
     console.log('>> postgres dialect options: ', dialectOptions);
 
     return dialectOptions;
