@@ -5,18 +5,17 @@ export enum ETreeNodeType {
     POST = 'post',
 }
 
-// import { ETreeNodeType } from '../markdown/constants';
 export interface TCategoryTreeNode {
     type: ETreeNodeType.CATEGORY;
     id: number;
     title: string;
-    parent_id: number | null;
-    level: number;
-    group_id: number | null;
-    priority: number;
-    post_id: null;
     slug: null;
-    content: null;
+    parent_id: number | null;
+    group_id: number | null;
+    level: number;
+    priority: number;
+    username: string;
+    post_id: null;
     description: null;
     created_at: null;
     updated_at: null;
@@ -27,20 +26,18 @@ export interface TPostTreeNode {
     type: ETreeNodeType.POST;
     id: number;
     title: string;
-    parent_id: number;
-    level: number;
-    group_id: null;
-    priority: number;
-    post_id: number;
     slug: string;
-    content: string;
+    parent_id: number;
+    group_id: null;
+    level: number;
+    priority: number;
+    username: string;
+    post_id: number;
     description: string | null;
     created_at: string;
     updated_at: string;
     sort_key: string;
 }
-
-export type TTreeNode = TCategoryTreeNode | TPostTreeNode;
 
 export interface TCategoryTreeResponse {
     success: boolean;
@@ -49,6 +46,9 @@ export interface TCategoryTreeResponse {
     };
 }
 
-export type TTreeNodeWithChildren = (TCategoryTreeNode | TPostTreeNode) & {
+export type TTreeNode = TCategoryTreeNode | TPostTreeNode;
+
+export type TTreeNodeWithChildren = TTreeNode & {
     children?: TTreeNodeWithChildren[];
+    postCount?: number;
 };

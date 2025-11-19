@@ -21,14 +21,15 @@
             "import": "./dist/add.mjs"
         },
         "./types": {
-            "types": "./src/types/inde.ts",
-            "default": "./dist/index.js"
+            "types": "./dist/types/index.d.ts",
+            "require": "./dist/types.cjs",
+            "import": "./dist/types.mjs"
         }
     },
     "scripts": {
         "clean": "rm -rf dist",
         "build": "yarn run clean && rollup -c",
-        "dev": "yarn run clean && rollup -c -w",
+        "deprecated:dev": "yarn run clean && rollup -c -w",
         "lint": "eslint . --ext .ts",
         "prepublishOnly": "yarn run build",
         "test": "jest",

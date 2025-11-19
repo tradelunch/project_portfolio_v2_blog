@@ -37,7 +37,7 @@ const dialectOptions: any = (() => {
             rejectUnauthorized: false,
         },
     };
-    console.log('>> postgres dialect options: ', dialectOptions);
+    // console.log('>> postgres dialect options: ', dialectOptions);
 
     return dialectOptions;
 })();
@@ -71,7 +71,7 @@ const config: Options = {
     },
 };
 
-console.log('>> database config: ', config);
+// console.log('>> database config: ', config);
 export const sequalizeP = new Sequelize(config);
 
 export async function initializeDatabase(db: Sequelize): Promise<Sequelize> {

@@ -6,5 +6,5 @@ export {
     TPostTreeNode,
     TTreeNode,
     TTreeNodeWithChildren,
-    // ETreeNodeType,
+    ETreeNodeType,
 } from './category.types';
