@@ -1,10 +1,10 @@
 'use client';
 
-import {
-    ETreeNodeType,
-    TTreeNode,
-    TTreeNodeWithChildren,
-} from '@/apis/blog.types';
+// import {
+//     ETreeNodeType,
+//     TTreeNode,
+//     TTreeNodeWithChildren,
+// } from '@/apis/blog.types';
 
 import React, { use, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,6 +14,11 @@ import {
 } from '@/app/blog/_components/CategoryTree.client';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import {
+    ETreeNodeType,
+    TTreeNode,
+    TTreeNodeWithChildren,
+} from '@repo/markdown-parsing/types';
 
 // // ============================================================================
 // // CategorySidebar Component

@@ -1,7 +1,10 @@
 // apis/getCategories.api.ts
-import { TTreeNode } from '@/apis/blog.types';
+// import { TTreeNode } from '@/apis/blog.types';
 import { axios_instance } from '@repo/axios';
-import { ETreeNodeType } from '@repo/markdown-parsing';
+import {
+    ETreeNodeType,
+    TCategoryTreeResponse,
+} from '@repo/markdown-parsing/types';
 
 export type TCategory = {
     id: number;
@@ -12,11 +15,6 @@ export type TCategory = {
     level: number;
     post_count: number;
     type: ETreeNodeType;
-};
-
-export type TCategoriesResponse = {
-    success: boolean;
-    categories: TTreeNode[];
 };
 
 // export async function getCategoriesByUsername(
@@ -46,9 +44,9 @@ export type TCategoriesResponse = {
 
 export async function getCategoriesByUsername(
     username: string
-): Promise<TCategoriesResponse> {
+): Promise<TCategoryTreeResponse> {
     try {
-        const response = await axios_instance.get<TCategoriesResponse>(
+        const response = await axios_instance.get<TCategoryTreeResponse>(
             `/v1/api/posts/users/${username}/categories`
         );
 
