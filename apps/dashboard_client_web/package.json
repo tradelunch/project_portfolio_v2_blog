@@ -6,8 +6,10 @@
     "scripts": {
         "dev": "cross-env NODE_ENV=development next dev --port 3001 --turbopack",
         "build": "cross-env NODE_ENV=production next build",
-        "start": "cross-env NODE_ENV=production next build &&pm2 start \"next start -p 3000\" --name dashboard_client_web",
-        "status": "pm2 ps && pm2 status",
+        "start:server": "next start -p 3000",
+        "start:old": "cross-env NODE_ENV=production pm2 start \"next start -p 3000\" --name dashboard_client_web",
+        "start:pm2": "pm2 start npm --name dashboard_client_web -- run start:server",
+        "status": "pm2 ps",
         "logs": "pm2 logs",
         "stop": "pm2 kill",
         "lint": "next lint --max-warnings 0",

@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 const dotenv_path = path.resolve(process.cwd(), '.env');
-console.log({ dotenv_path });
+console.log(">> ", { dotenv_path });
 
 dotenv.config({ path: dotenv_path });
 
