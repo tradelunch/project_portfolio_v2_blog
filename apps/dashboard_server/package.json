@@ -9,7 +9,7 @@
         "build": "tsc && tsc-alias",
         "start": "node dist/index.js",
         "prod": "cross-env NODE_ENV=production yarn build && pm2 start dist/index.js --name tradelunch",
-        "status": "pm2 ps && pm2 status",
+        "status": "pm2 status",
         "logs": "pm2 logs",
         "stop": "pm2 kill",
         "read": "ts-node -r tsconfig-paths/register --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\"}\"",
@@ -44,7 +44,7 @@
         "@types/node": "^24.9.2",
         "@types/ssh2": "^1.15.5",
         "nodemon": "^3.1.10",
-        "pm2": "^6.0.13",
+        "pm2": "^6.0.14",
         "ssh2": "^1.17.0",
         "tsc-alias": "^1.8.16",
         "tsx": "^4.20.6"
