@@ -54,7 +54,6 @@ export default async function RootLayout({
                 ibmPlexMono.variable
             )}
         >
-            <head></head>
             <body
                 className={clsx(
                     // geist.className,

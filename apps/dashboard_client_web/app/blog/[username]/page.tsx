@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import BlogMainPage from '@/app/blog/_components/BlogMainPage';
 
 type PageProps = {

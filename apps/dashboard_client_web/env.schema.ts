@@ -3,9 +3,13 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 const dotenv_path = path.resolve(process.cwd(), '.env');
-console.log(">> ", { dotenv_path });
-
 dotenv.config({ path: dotenv_path });
+
+if (process.env.NODE_ENV == 'production') {
+    // Load .env.production to override any variables from .env
+    dotenv.config({ path: path.resolve(process.cwd(), '.env.production'), override: true });
+    console.log('>> ', `client Loaded environment variables from .env.production`);
+}
 
 const envSchema = z.object({
     NODE_ENV: z
@@ -14,6 +18,7 @@ const envSchema = z.object({
     PORT: z.coerce.number().default(3000),
     HOST_NAME: z.string().default('localhost'),
 
+    NEXT_PUBLIC_API_BASE: z.string().url().default('http://localhost:4000'),
     NEXT_PUBLIC_CDN_ASSET_POSTS: z
         .string()
         .url()
@@ -24,4 +29,13 @@ export const env = envSchema.parse(process.env);
 
 export const SERVER_PORT = env.PORT;
 export const HOST_NAME = env.HOST_NAME;
+export const API_BASE = env.NEXT_PUBLIC_API_BASE;
 export const CDN_ASSET_POSTS = env.NEXT_PUBLIC_CDN_ASSET_POSTS;
+
+console.log('>>', {
+    NODE_ENV: env.NODE_ENV,
+    PORT: SERVER_PORT,
+    HOST_NAME: HOST_NAME,
+    API_BASE: process.env.NEXT_PUBLIC_API_BASE,
+    NEXT_PUBLIC_CDN_ASSET_POSTS: CDN_ASSET_POSTS,
+});

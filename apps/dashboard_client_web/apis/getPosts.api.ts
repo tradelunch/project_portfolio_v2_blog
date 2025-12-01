@@ -1,6 +1,6 @@
 // apis/getPosts.api.ts
 import { TPaginatedResponse } from '@/apis/blog.types';
-import { axios_instance } from '@repo/axios'; // 경로는 프로젝트에 맞게 조정
+import axios_instance from '@/apis/axios_instance';
 
 export async function getBlogPostsByUsername(
     cursor: number = 0,

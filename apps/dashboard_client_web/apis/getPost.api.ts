@@ -1,4 +1,4 @@
-import { axios_instance } from '@repo/axios';
+import axios_instance from '@/apis/axios_instance';
 
 export const getPostBySlug = async ({ slug }: { slug: string }) => {
     try {
