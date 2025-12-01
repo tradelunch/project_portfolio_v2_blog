@@ -36,3 +36,4 @@ yarn-error.log*
 # etc
 .env
 .env.production
+next-env.d.ts
