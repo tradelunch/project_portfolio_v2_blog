@@ -13,7 +13,7 @@
         "start:pm2": "pm2 start npm --name dashboard_client_web -- run start:server",
         "status": "pm2 ps",
         "logs": "pm2 logs",
-        "stop": "pm2 kill",
+        "stop": "pm2 stop",
         "lint": "next lint --max-warnings 0",
         "check-types": "tsc --noEmit"
     },

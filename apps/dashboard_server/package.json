@@ -11,7 +11,7 @@
         "start:pm2": "cross-env NODE_ENV=production yarn build && pm2 start dist/src/index.js --name tradelunch",
         "status": "pm2 status",
         "logs": "pm2 logs",
-        "stop": "pm2 kill",
+        "stop": "pm2 stop",
         "read": "ts-node -r tsconfig-paths/register --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\"}\"",
         "test": "cross-env NODE_ENV=test jest",
         "test:watch": "cross-env NODE_ENV=test jest --watch",
