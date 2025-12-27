@@ -66,7 +66,7 @@ export const ResumePage = () => {
                                     className="object-contain"
                                 /> */}
                                 <iframe
-                                    src="/resume_taek_lim_052026.pdf"
+                                    src="/resume_taek_lim_1226.pdf"
                                     title="Taek Lim Resume"
                                     className="absolute inset-0"
                                     width="100%"
