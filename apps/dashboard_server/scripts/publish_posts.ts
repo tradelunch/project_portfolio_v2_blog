@@ -8,7 +8,7 @@ import {
 } from '@/scripts/publish_post/upload_image';
 
 import { initializeDatabase, sequalizeP } from '@/src/database';
-import { CDN_ASSET_POSTS } from '@/src/config/env.schema';
+import { CDN_ASSET_POSTS, DEFAULT_USER_ID } from '@/src/config/env.schema';
 
 import { Sequelize, Transaction } from 'sequelize';
 
@@ -51,7 +51,7 @@ const run = async () => {
             categories: folderPath.split('/'),
         };
         // TODO: Hard Coding userId
-        meta.userId = '4';
+        meta.userId = String(DEFAULT_USER_ID);
 
         // 2. load local file
         const { buffer, contentType, fullPath, fileSize } =

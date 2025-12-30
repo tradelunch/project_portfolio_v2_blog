@@ -6,7 +6,7 @@ import { ModeToggle } from '@/components/mode-toggle';
 
 const LINKS = [
     { title: 'About', href: '/' },
-    { title: 'blog', href: '/blog' },
+    { title: 'blog', href: '/blog/@taeklim' },
     // { title: 'projects', href: '/projects' },
     { title: 'resume', href: '/resume' },
 ];

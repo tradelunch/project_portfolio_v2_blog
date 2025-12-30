@@ -51,6 +51,9 @@ const envSchema = z.object({
 
     // CDN
     CDN_ASSET_POSTS: z.string().default('https://posts.prettylog.com/'),
+
+    // user id
+    DEFAULT_USER_ID: z.coerce.number().default(2),
 });
 
 export const env = envSchema.parse(process.env);
@@ -79,3 +82,4 @@ export const CDN_ASSET_POSTS = env.CDN_ASSET_POSTS;
 export const EC2_HOST = env.EC2_HOST;
 export const EC2_PORT = env.EC2_PORT;
 export const EC2_USERNAME = env.EC2_USERNAME;
+export const DEFAULT_USER_ID = env.DEFAULT_USER_ID;

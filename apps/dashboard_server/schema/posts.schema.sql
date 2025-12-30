@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS posts (
 drop table if exists categories;
 CREATE TABLE if not exists categories (
     id              BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name        VARCHAR(100) NOT NULL UNIQUE,
+    name        VARCHAR(100) NOT NULL, --UNIQUE,
     parent_id   BIGINT NOT NULL,
     root_id     BIGINT NOT NULL,
     level       INT NOT NULL DEFAULT 0,

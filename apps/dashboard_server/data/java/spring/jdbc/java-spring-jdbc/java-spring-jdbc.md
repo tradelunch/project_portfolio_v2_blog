@@ -1,52 +1,50 @@
 ---
-title: "java spring jdbc"
+title: 'java spring jdbc'
 tags: [java, spring, jdbc]
-desc: Spring Boot 프로젝트에서 spring-session-jdbc, spring-boot-starter-data-jdbc, spring-boot-starter-jdbc의 역할과 사용처를 설명해 드리겠습니다.
+desc: This article explains the roles and use cases of spring-session-jdbc, spring-boot-starter-data-jdbc, and spring-boot-starter-jdbc in a Spring Boot project.
 date: 2025-10-26 18:31:03
 userId: 2
 username: taeklim
 status: false
 ---
 
-
-# java spring jdbc
+# Java Spring JDBC
 
 ![java-spring-jdbc thumbnail](./java-spring-jdbc.png)
 
-
-Spring Boot 프로젝트에서 spring-session-jdbc, spring-boot-starter-data-jdbc, spring-boot-starter-jdbc의 역할과 사용처를 설명해 드리겠습니다.
+This article explains the roles and use cases of spring-session-jdbc, spring-boot-starter-data-jdbc, and spring-boot-starter-jdbc in a Spring Boot project.
 
 ---
 
 **1️⃣ org.springframework.session:spring-session-jdbc**
 
-**✅ 기능:**
+**✅ Features:**
 
-• **Spring Session을 JDBC 기반으로 저장**할 수 있도록 해주는 라이브러리입니다.
+• A library that enables **storing Spring Sessions using JDBC**.
 
-• 기본적으로 **세션 데이터를 데이터베이스(DB)**에 저장하며, **서버 재시작 시에도 세션 유지**가 가능합니다.
+• By default, it **stores session data in a database (DB)**, allowing **session persistence even after server restarts**.
 
-**✅ 사용처:**
+**✅ Use Cases:**
 
-• **분산 환경**에서 여러 서버 간 세션을 공유할 때 사용
+• When sharing sessions across multiple servers in a **distributed environment**
 
-• **스프링 부트 내장 세션 저장소**(기본 In-Memory) 대신 **데이터베이스 기반 세션 저장**이 필요할 때
+• When **database-based session storage** is needed instead of **Spring Boot's built-in session store** (default In-Memory)
 
-**✅ 사용 예시 (application.yml 설정)**
+**✅ Example Configuration (application.yml)**
 
-```js
+```yaml
 spring:
-  session:
-    store-type: jdbc  # JDBC 기반 세션 저장소 사용
-  datasource:
-    url: jdbc:mysql://localhost:3306/mydb
-    username: user
-    password: pass
+    session:
+        store-type: jdbc # Use JDBC-based session storage
+    datasource:
+        url: jdbc:mysql://localhost:3306/mydb
+        username: user
+        password: pass
 ```
 
-📌 **활용 예시**
+📌 **Usage Example**
 
-세션을 관리하는 서비스에서 HTTP 세션을 **DB에 저장**하여 여러 인스턴스에서 세션을 공유할 때 사용합니다.
+Used when **storing HTTP sessions in a DB** to share sessions across multiple instances in a session management service.
 
 ```java
 @Controller
@@ -63,34 +61,34 @@ public class SessionController {
 
 **2️⃣ org.springframework.boot:spring-boot-starter-data-jdbc**
 
-**✅ 기능:**
+**✅ Features:**
 
-• **Spring Data JDBC**를 사용하여 데이터베이스 접근을 간편하게 처리
+• Simplifies database access using **Spring Data JDBC**
 
-• Spring Data JPA와 달리, **JDBC 기반으로 단순한 CRUD 작업에 최적화**됨
+• Unlike Spring Data JPA, it is **optimized for simple CRUD operations based on JDBC**
 
-• **JPA보다 가벼운 데이터 액세스 계층을 만들 때 유용**
+• **Useful for creating a lightweight data access layer compared to JPA**
 
-**✅ 사용처:**
+**✅ Use Cases:**
 
-• JPA(Hibernate)를 사용하지 않고, 가볍게 JDBC를 활용할 때
+• When using JDBC lightly without JPA (Hibernate)
 
-• 복잡한 엔티티 매핑 없이 간단한 **Repository 패턴 기반 데이터 접근**이 필요할 때
+• When **Repository pattern-based data access** is needed without complex entity mapping
 
-**✅ 사용 예시 (Repository 패턴)**
+**✅ Example (Repository Pattern)**
 
-```python
+```java
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
     List<User> findByUsername(String username);
 }
 ```
 
-📌 **활용 예시**
+📌 **Usage Example**
 
-JPA 대신 JDBC 기반의 **간단한 CRUD 처리를 할 때** 유용합니다.
+Useful for **simple CRUD processing** using JDBC instead of JPA.
 
-```rust
+```java
 @Service
 public class UserService {
     private final JdbcTemplate jdbcTemplate;
@@ -110,25 +108,25 @@ public class UserService {
 
 **3️⃣ org.springframework.boot:spring-boot-starter-jdbc**
 
-**✅ 기능:**
+**✅ Features:**
 
-• **JDBC 기반 데이터베이스 연결 및 SQL 실행을 위한 기본적인 설정**을 제공
+• Provides **basic configuration for JDBC-based database connection and SQL execution**
 
-• DataSource, JdbcTemplate 등을 포함하여 **SQL 직접 실행 가능**
+• Includes DataSource, JdbcTemplate, etc., enabling **direct SQL execution**
 
-• spring-boot-starter-data-jdbc보다 더 로우 레벨의 JDBC 사용 가능
+• Allows lower-level JDBC usage compared to spring-boot-starter-data-jdbc
 
-**✅ 사용처:**
+**✅ Use Cases:**
 
-• Spring Boot에서 **JDBC를 직접 사용**할 때
+• When **directly using JDBC** in Spring Boot
 
-• JdbcTemplate을 활용하여 SQL을 직접 실행해야 할 때
+• When executing SQL directly using JdbcTemplate
 
-• ORM(JPA) 없이, SQL을 직접 사용해야 할 때
+• When SQL needs to be executed directly without ORM (JPA)
 
-**✅ 사용 예시 (JdbcTemplate 활용)**
+**✅ Example (Using JdbcTemplate)**
 
-```c++
+```java
 @Autowired
 private JdbcTemplate jdbcTemplate;
 
@@ -137,42 +135,42 @@ public void insertUser(String username) {
 }
 ```
 
-📌 **활용 예시**
+📌 **Usage Example**
 
-• **ORM 없이 SQL을 직접 실행**해야 하는 경우
+• When **SQL needs to be executed directly without ORM**
 
-• 빠른 SQL 실행이 필요한 경우 (JOIN, GROUP BY 등 최적화가 필요할 때)
-
----
-
-**📌 정리**
-
-| **라이브러리**                | **역할**              | **언제 사용?**                                |
-| ----------------------------- | --------------------- | --------------------------------------------- |
-| spring-session-jdbc           | 세션을 DB에 저장      | 세션을 유지하면서 서버 간 공유해야 할 때      |
-| spring-boot-starter-data-jdbc | Spring Data JDBC 지원 | JPA 없이 간단한 Repository 패턴을 사용할 때   |
-| spring-boot-starter-jdbc      | 기본 JDBC 지원        | SQL을 직접 실행해야 할 때 (JdbcTemplate 활용) |
+• When fast SQL execution is required (optimization needed for JOIN, GROUP BY, etc.)
 
 ---
 
-**🚀 어떤 경우에 무엇을 사용해야 할까요?**
+**📌 Summary**
 
-• **Spring Boot 기본 JDBC 사용** → spring-boot-starter-jdbc
-
-• **Repository 기반 간단한 CRUD** → spring-boot-starter-data-jdbc
-
-• **서버 간 세션 공유 & 유지** → spring-session-jdbc
+| **Library**                   | **Role**                 | **When to Use?**                                    |
+| ----------------------------- | ------------------------ | --------------------------------------------------- |
+| spring-session-jdbc           | Store sessions in DB     | When session persistence and sharing across servers |
+| spring-boot-starter-data-jdbc | Spring Data JDBC support | When using simple Repository pattern without JPA    |
+| spring-boot-starter-jdbc      | Basic JDBC support       | When executing SQL directly (using JdbcTemplate)    |
 
 ---
 
-**📢 결론**
+**🚀 Which one should you use?**
 
-• spring-boot-starter-jdbc는 **기본 JDBC 지원**을 위한 라이브러리입니다.
+• **Basic JDBC usage in Spring Boot** → spring-boot-starter-jdbc
 
-• spring-boot-starter-data-jdbc는 **Spring Data JDBC 기반의 Repository 패턴을 쉽게 적용**할 수 있도록 합니다.
+• **Simple CRUD with Repository pattern** → spring-boot-starter-data-jdbc
 
-• spring-session-jdbc는 **세션 데이터를 DB에 저장하여 관리**하는 데 사용됩니다.
+• **Session sharing & persistence across servers** → spring-session-jdbc
 
-이제 프로젝트의 목적에 맞게 적절한 라이브러리를 선택하시면 됩니다! 😊
+---
+
+**📢 Conclusion**
+
+• spring-boot-starter-jdbc is a library for **basic JDBC support**.
+
+• spring-boot-starter-data-jdbc makes it easy to **apply Spring Data JDBC-based Repository patterns**.
+
+• spring-session-jdbc is used for **storing and managing session data in a database**.
+
+Choose the appropriate library based on your project's requirements! 😊
 
 ## Test h2 header
